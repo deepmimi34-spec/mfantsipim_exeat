@@ -1,0 +1,113 @@
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils import timezone
+
+from accounts.models import StudentProfile
+
+
+class ExternalExeat(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending school review"
+        UNDER_REVIEW = "under_review", "Under review"
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+        CANCELLED = "cancelled", "Cancelled"
+
+    class ParentVerificationStatus(models.TextChoices):
+        PENDING = "pending", "Awaiting parent confirmation"
+        CONFIRMED = "confirmed", "Parent confirmed"
+        FAILED = "failed", "Parent could not be verified"
+
+    student = models.ForeignKey(
+        StudentProfile,
+        on_delete=models.PROTECT,
+        related_name="external_exeats",
+    )
+    requested_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="external_exeat_requests",
+        null=True,
+        blank=True,
+        help_text="Account that submitted this request.",
+    )
+
+    purpose = models.CharField(
+        max_length=200,
+        help_text="Explain why the student needs to leave school.",
+    )
+    destination = models.CharField(
+        max_length=200,
+        help_text="Destination, e.g. Kumasi, Accra or Koforidua.",
+    )
+    departure_date = models.DateField()
+    departure_time = models.TimeField()
+    return_date = models.DateField()
+    return_time = models.TimeField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    parent_verification_status = models.CharField(
+        max_length=20,
+        choices=ParentVerificationStatus.choices,
+        default=ParentVerificationStatus.PENDING,
+    )
+    staff_notes = models.TextField(blank=True)
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviewed_external_exeats",
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # Retains the table name from the model you originally supplied.
+        db_table = "ExternalExeat"
+        ordering = ["-created_at"]
+        verbose_name = "External exeat"
+        verbose_name_plural = "External exeats"
+
+    def clean(self):
+        super().clean()
+
+        if (
+            self.departure_date
+            and self.return_date
+            and self.return_date < self.departure_date
+        ):
+            raise ValidationError({
+                "return_date": "The return date cannot be before the departure date."
+            })
+
+        if (
+            self.departure_date
+            and self.departure_time
+            and self.return_date
+            and self.return_time
+            and self.return_date == self.departure_date
+            and self.return_time <= self.departure_time
+        ):
+            raise ValidationError({
+                "return_time": "The return time must be after the departure time."
+            })
+
+        if (
+            self.status == self.Status.APPROVED
+            and self.parent_verification_status
+            != self.ParentVerificationStatus.CONFIRMED
+        ):
+            raise ValidationError({
+                "status": "Confirm the parent through the school's official contact record before approving this exeat."
+            })
+
+    def __str__(self):
+        student_name = f"{self.student.first_name} {self.student.last_name}"
+        return f"{student_name} — {self.purpose[:60]}"

@@ -1,0 +1,576 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ page_title|default:"Home | Mfantsipim School Exeat Portal" }}</title>
+
+    <style>
+        :root {
+            --crimson: #8b1538;
+            --dark-crimson: #5d0c24;
+            --gold: #d5b778;
+            --light: #f7f5f2;
+            --text: #252525;
+            --muted: #686868;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--light);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Navigation */
+
+        .site-header {
+            background: var(--dark-crimson);
+            color: var(--white);
+            padding: 18px 7%;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .brand {
+            color: var(--white);
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            display: block;
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 22px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--white);
+            font-size: 0.93rem;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover,
+        nav a[aria-current="page"] {
+            color: var(--gold);
+        }
+
+        /* Hero section */
+
+        .hero {
+            background:
+                linear-gradient(
+                    110deg,
+                    rgba(55, 5, 23, 0.95),
+                    rgba(139, 21, 56, 0.85)
+                );
+            color: var(--white);
+            padding: 90px 7%;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            max-width: 800px;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero p {
+            max-width: 680px;
+            color: #f0e9ec;
+            font-size: 1.08rem;
+            margin-bottom: 30px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            transition: transform 0.2s ease,
+                        background 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--gold);
+            color: var(--dark-crimson);
+        }
+
+        .button-primary:hover {
+            background: #e4cb94;
+        }
+
+        .button-outline {
+            border: 1px solid var(--white);
+            color: var(--white);
+        }
+
+        .button-outline:hover {
+            background: var(--white);
+            color: var(--dark-crimson);
+        }
+
+        /* Main content */
+
+        .section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 65px 7%;
+        }
+
+        .section-heading {
+            margin-bottom: 32px;
+        }
+
+        .section-heading h2 {
+            color: var(--dark-crimson);
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            max-width: 680px;
+        }
+
+        /* Service cards */
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 1px solid #e9e2e4;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 5px 18px rgba(40, 10, 20, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #f5e5eb;
+            color: var(--crimson);
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+        }
+
+        .service-card h3 {
+            color: var(--dark-crimson);
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            color: var(--muted);
+            margin-bottom: 22px;
+            flex-grow: 1;
+        }
+
+        .card-link {
+            color: var(--crimson);
+            font-weight: bold;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        /* How it works */
+
+        .process-section {
+            background: #eee8e8;
+        }
+
+        .process-content {
+            max-width: 1200px;
+            margin: auto;
+            padding: 60px 7%;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .step {
+            padding: 20px 0;
+        }
+
+        .step-number {
+            display: inline-grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--crimson);
+            color: var(--white);
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .step h3 {
+            color: var(--dark-crimson);
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: var(--muted);
+        }
+
+        .notice {
+            margin-top: 30px;
+            padding: 17px 20px;
+            border-left: 4px solid var(--gold);
+            background: var(--white);
+            color: #454047;
+            border-radius: 4px;
+        }
+
+        /* Footer */
+
+        footer {
+            background: var(--dark-crimson);
+            color: var(--white);
+            text-align: center;
+            padding: 28px 7%;
+        }
+
+        footer h3 {
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: #eadfe3;
+        }
+
+        /* Mobile responsiveness */
+
+        @media (max-width: 850px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                gap: 14px;
+            }
+
+            .service-grid,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 65px;
+                padding-bottom: 65px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-header {
+                padding: 18px 5%;
+            }
+
+            nav ul {
+                gap: 10px 16px;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+
+            .section,
+            .process-content {
+                padding: 45px 6%;
+            }
+
+            .hero {
+                padding-left: 6%;
+                padding-right: 6%;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <div class="nav-container">
+
+            <a href="/" class="brand">
+                MFANTSIPIM SCHOOL
+                <span>DWEN HWE KAN</span>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li>
+                        <a href="/" aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'internal_exeat:internal_exeat' %}">Internal Exeat</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'external_exeat:external_exeat_create' %}">
+                            External Exeat
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/announcements/">Announcements</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- Welcome section -->
+    <main>
+
+        <section class="hero">
+            <div class="hero-content">
+
+                <p class="eyebrow">Mfantsipim School · Cape Coast, Ghana</p>
+
+                <h1>
+                    Welcome to the
+                    <span>Digital Exeat Portal</span>
+                </h1>
+
+                <p>
+                    A digital platform for managing student exeat requests.
+                    Access the appropriate exeat service, review school
+                    announcements, and follow the school's established
+                    approval process.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{% url 'internal_exeat:internal_exeat' %}" class="button button-primary">
+                        Internal Exeat
+                    </a>
+
+                    <a href="{% url 'external_exeat:external_exeat_create' %}"
+                       class="button button-outline">
+                        External Exeat
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Portal services -->
+        <section class="section">
+            <div class="section-heading">
+                <h2>Explore the Portal</h2>
+                <p>
+                    Choose a service below to continue to the relevant
+                    section of the Mfantsipim School Exeat Portal.
+                </p>
+            </div>
+
+            <div class="service-grid">
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">🏫</div>
+
+                    <h3>Internal Exeat</h3>
+
+                    <p>
+                        Access the internal exeat service for requests
+                        that fall under the school's internal exeat
+                        procedures.
+                    </p>
+
+                    <a href="{% url 'internal_exeat:internal_exeat' %}" class="card-link">
+                        Go to Internal Exeat &rarr;
+                    </a>
+                </article>
+
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">🚪</div>
+
+                    <h3>External Exeat</h3>
+
+                    <p>
+                        Submit an external exeat request by providing the
+                        required student information, purpose, destination,
+                        and departure and return details.
+                    </p>
+
+                    <a href="{% url 'external_exeat:external_exeat_create' %}"
+                       class="card-link">
+                        Request External Exeat &rarr;
+                    </a>
+                </article>
+
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">📢</div>
+
+                    <h3>Announcements</h3>
+
+                    <p>
+                        Visit the announcements section for school notices
+                        and important information published by the school.
+                    </p>
+
+                    <a href="/announcements/" class="card-link">
+                        View Announcements &rarr;
+                    </a>
+                </article>
+
+            </div>
+        </section>
+
+
+        <!-- Process information -->
+        <section class="process-section">
+            <div class="process-content">
+
+                <div class="section-heading">
+                    <h2>How the Exeat Process Works</h2>
+                    <p>
+                        The portal supports the school's exeat process;
+                        submitting a request does not automatically grant
+                        permission to leave.
+                    </p>
+                </div>
+
+                <div class="steps">
+
+                    <article class="step">
+                        <span class="step-number">1</span>
+                        <h3>Select a Service</h3>
+                        <p>
+                            Open the internal or external exeat section,
+                            depending on the type of request required.
+                        </p>
+                    </article>
+
+                    <article class="step">
+                        <span class="step-number">2</span>
+                        <h3>Submit the Request</h3>
+                        <p>
+                            Complete the relevant request form and provide
+                            accurate information for school review.
+                        </p>
+                    </article>
+
+                    <article class="step">
+                        <span class="step-number">3</span>
+                        <h3>Await Authorisation</h3>
+                        <p>
+                            Follow the school's verification and approval
+                            procedures before making arrangements to leave.
+                        </p>
+                    </article>
+
+                </div>
+
+                <div class="notice">
+                    <strong>Important:</strong>
+                    Students must follow school rules and obtain the
+                    required authorisation before leaving school grounds.
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <h3>Mfantsipim School</h3>
+        <p>“Dwen Hwe Kan”</p>
+        <p>
+            Exeat Portal &copy; {% now "Y" %} |
+            Cape Coast, Ghana
+        </p>
+    </footer>
+
+</body>
+</html>
