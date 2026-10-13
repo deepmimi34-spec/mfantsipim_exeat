@@ -1,0 +1,89 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parent dashboard | Mfantsipim School</title>
+  <link rel="stylesheet" href="{% static 'guardians/css/portal.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-container">
+      <a class="brand" href="/">MFANTSIPIM SCHOOL <span>DWEN HWE KAN</span></a>
+      <nav aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="{% url 'guardians:dashboard' %}" aria-current="page">Parent dashboard</a>
+        <a href="/announcements/">Announcements</a>
+        <form class="inline-form" method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}<button class="nav-button" type="submit">Sign out</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+    <section class="welcome-panel">
+      <p class="eyebrow">Secure parent portal</p>
+      <h1>Welcome{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}</h1>
+      <p>Signed in as <strong>{{ request.user.email }}</strong>. Student information is shown only where the school has verified your guardian link.</p>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <div><h2>Your linked children</h2><p>Choose a service to request an exeat for a verified child.</p></div>
+      </div>
+      <div class="card-grid">
+        {% for link in children %}
+          <article class="portal-card child-card">
+            <div class="avatar-mark" aria-hidden="true">{{ link.student.first_name|first|upper }}{{ link.student.last_name|first|upper }}</div>
+            <h3>{{ link.student.first_name }} {{ link.student.last_name }}</h3>
+            <p class="muted">{{ link.student.current_classroom }}{% if link.student.house %} · {{ link.student.house }}{% endif %}</p>
+            <p class="relationship">{{ link.get_relationship_display }} · Verified</p>
+            <div class="card-actions">
+              <a class="button button-primary" href="{% url 'internal_exeat:internal_exeat_create' %}">Internal exeat</a>
+              <a class="button button-secondary" href="{% url 'external_exeat:external_exeat_create' %}">External exeat</a>
+            </div>
+          </article>
+        {% empty %}
+          <div class="empty-state">
+            <h3>No verified children linked yet</h3>
+            <p>Your child will appear here after you accept a valid school-issued invitation using the invited Google account. Contact the school office if you believe a link is missing.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading"><div><h2>Recent internal exeat requests</h2><p>Requests for your verified children.</p></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Purpose</th><th>Departure</th><th>Return</th><th>Status</th><th>Parent check</th></tr></thead>
+          <tbody>
+            {% for item in internal_requests %}
+              <tr><td>{{ item.student.first_name }} {{ item.student.last_name }}</td><td>{{ item.purpose }}</td><td>{{ item.departure_date }} {{ item.departure_time }}</td><td>{{ item.return_date }} {{ item.return_time }}</td><td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td><td>{{ item.get_parent_verification_status_display }}</td></tr>
+            {% empty %}<tr><td colspan="6" class="table-empty">No internal exeat requests yet.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading"><div><h2>Recent external exeat requests</h2><p>Requests for your verified children.</p></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Purpose</th><th>Destination</th><th>Departure</th><th>Return</th><th>Status</th><th>Parent check</th></tr></thead>
+          <tbody>
+            {% for item in external_requests %}
+              <tr><td>{{ item.student.first_name }} {{ item.student.last_name }}</td><td>{{ item.purpose }}</td><td>{{ item.destination }}</td><td>{{ item.departure_date }} {{ item.departure_time }}</td><td>{{ item.return_date }} {{ item.return_time }}</td><td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td><td>{{ item.get_parent_verification_status_display }}</td></tr>
+            {% empty %}<tr><td colspan="7" class="table-empty">No external exeat requests yet.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><strong>Mfantsipim School</strong><p>“Dwen Hwe Kan” · Cape Coast, Ghana</p><p>© {% now "Y" %} Exeat Portal</p></footer>
+</body>
+</html>

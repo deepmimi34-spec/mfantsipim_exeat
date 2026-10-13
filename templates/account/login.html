@@ -1,0 +1,27 @@
+{% load static socialaccount %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in | Mfantsipim Parent Portal</title>
+  <link rel="stylesheet" href="{% static 'guardians/css/portal.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <p class="eyebrow">Mfantsipim School · Dwen Hwe Kan</p>
+    <h1>Sign in securely</h1>
+    <p>Use the Google account registered with the school. A sign-in alone does not grant access to any student record; a school-issued invitation is required.</p>
+    {% if messages %}
+      <div class="messages" aria-live="polite">
+        {% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}
+      </div>
+    {% endif %}
+    <a class="button button-primary button-wide" href="{% provider_login_url 'google' process='login' next=request.GET.next %}">
+      <span aria-hidden="true">G</span> Continue with Google
+    </a>
+    <p class="fine-print">Having trouble? Contact the school office using its official contact details.</p>
+    <a class="text-link" href="/">Return to the portal homepage</a>
+  </main>
+</body>
+</html>
