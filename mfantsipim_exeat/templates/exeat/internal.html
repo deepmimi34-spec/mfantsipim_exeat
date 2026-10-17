@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title|default:"Internal Exeat | Mfantsipim School" }}</title>
+  <link rel="stylesheet" href="{% static 'guardians/css/portal.css' %}">
+</head>
+<body>
+<header class="site-header"><div class="nav-container">
+  <a class="brand" href="/">MFANTSIPIM SCHOOL <span>DWEN HWE KAN</span></a>
+  <nav aria-label="Main navigation"><a href="/">Home</a><a href="{% url 'guardians:dashboard' %}">Parent dashboard</a><a href="{% url 'external_exeat:external_exeat_create' %}">External exeat</a><a href="/announcements/">Announcements</a></nav>
+</div></header>
+<main class="container form-page">
+  {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+  <section class="form-heading"><p class="eyebrow">Parent and guardian portal</p><h1>Internal Exeat Request</h1><p>Select a verified child and provide the details of the request. Submission is not permission to leave school.</p></section>
+  {% if not has_verified_children %}
+    <div class="notice"><strong>No verified child is linked to your account.</strong> You must accept a school-issued guardian invitation before submitting an exeat request. Contact the school office if you need help.</div>
+  {% else %}
+    <form method="post" action="{% url 'internal_exeat:internal_exeat_create' %}" class="exeat-form">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+      <section class="form-section"><h2>Student information</h2><p class="section-help">Only students linked to your verified parent account are available.</p>
+        <div class="field-group"><label for="{{ form.student.id_for_label }}">{{ form.student.label }}</label>{{ form.student }}{% for error in form.student.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+      </section>
+      <section class="form-section"><h2>Exeat details</h2>
+        <div class="field-group"><label for="{{ form.purpose.id_for_label }}">Purpose</label>{{ form.purpose }}{% for error in form.purpose.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div class="field-group"><label for="{{ form.destination.id_for_label }}">Destination</label>{{ form.destination }}{% for error in form.destination.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        <div class="date-time-grid">
+          <div class="field-group"><label for="{{ form.departure_date.id_for_label }}">Departure date</label>{{ form.departure_date }}{% for error in form.departure_date.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+          <div class="field-group"><label for="{{ form.departure_time.id_for_label }}">Departure time</label>{{ form.departure_time }}{% for error in form.departure_time.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+          <div class="field-group"><label for="{{ form.return_date.id_for_label }}">Return date</label>{{ form.return_date }}{% for error in form.return_date.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+          <div class="field-group"><label for="{{ form.return_time.id_for_label }}">Return time</label>{{ form.return_time }}{% for error in form.return_time.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>
+        </div>
+      </section>
+      <div class="notice"><strong>Important:</strong> The request remains pending while school staff perform the required parent-contact verification and approval.</div>
+      <button class="button button-primary submit-button" type="submit">Submit internal exeat request</button>
+    </form>
+  {% endif %}
+</main>
+<footer class="site-footer"><strong>Mfantsipim School</strong><p>“Dwen Hwe Kan” · Cape Coast, Ghana</p><p>© {% now "Y" %} Exeat Portal</p></footer>
+</body></html>

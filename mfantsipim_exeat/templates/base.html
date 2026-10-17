@@ -1,0 +1,63 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Mfantsipim Digital Exeat{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'exeat/homepage.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<header class="site-header">
+    <a class="brand" href="{% url 'home' %}">
+        <span class="brand-mark">M</span>
+        <span>
+            <strong>Mfantsipim School</strong>
+            <small>Digital Exeat Portal</small>
+        </span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url '' %}">Internal Exeat</a>
+        <a href="{% url 'external_exeat' %}">External Exeat</a>
+        <a href="{% url 'announcements' %}">Announcements</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_exeats' %}">My Requests</a>
+            <span class="user-label">{{ user.get_username }}</span>
+        {% else %}
+            <a class="nav-login" href="{% url 'login' %}">Sign In</a>
+        {% endif %}
+    </nav>
+</header>
+
+{% if messages %}
+    <section class="messages" aria-live="polite">
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}
+
+<main class="page-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <h3>Mfantsipim School</h3>
+    <p><em>Dwen Hwe Kan</em></p>
+    <p>Digital Exeat Portal &copy; {% now "Y" %} | Cape Coast, Ghana</p>
+    <p>For assistance, contact your school administrator.</p>
+</footer>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

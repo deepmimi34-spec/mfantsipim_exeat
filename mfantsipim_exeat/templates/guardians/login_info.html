@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parent sign-in | Mfantsipim School</title>
+  <link rel="stylesheet" href="{% static 'guardians/css/portal.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <p class="eyebrow">Mfantsipim School · Cape Coast</p>
+    <h1>Parent and Guardian Portal</h1>
+    <p>Sign in with the Google account that received your invitation from the school. You will only see students linked to that verified account.</p>
+    {% if messages %}
+      <div class="messages" aria-live="polite">
+        {% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}
+      </div>
+    {% endif %}
+    <a class="button button-primary button-wide" href="/accounts/login/">Continue to secure sign-in</a>
+    <p class="fine-print">Do not use another person's Google account. If you need to link your child, contact the school office.</p>
+  </main>
+</body>
+</html>

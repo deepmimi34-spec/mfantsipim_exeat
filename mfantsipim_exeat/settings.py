@@ -104,12 +104,23 @@ if render_host:
 # EMAIL — DJANGO 6.1 MAILERS CONFIGURATION
 # --------------------------------------------------
 
+
+# --------------------------------------------------
+# EMAIL — DEMONSTRATION AND PRODUCTION CONFIGURATION
+# --------------------------------------------------
+
+DEMO_MODE = (
+    os.environ.get("DEMO_MODE", "false").strip().lower()
+    in {"true", "1", "yes"}
+)
+
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     "webmaster@localhost" if not IS_PRODUCTION else "",
 )
 
-if IS_PRODUCTION:
+if IS_PRODUCTION and not DEMO_MODE:
+    # Real email delivery is required outside demo mode.
     required_email_settings = [
         "SMTP_HOST",
         "SMTP_USERNAME",
@@ -133,7 +144,9 @@ if IS_PRODUCTION:
 
     MAILERS = {
         "default": {
-            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "BACKEND": (
+                "django.core.mail.backends.smtp.EmailBackend"
+            ),
             "OPTIONS": {
                 "host": os.environ["SMTP_HOST"],
                 "port": int(os.environ.get("SMTP_PORT", "587")),
@@ -147,8 +160,19 @@ if IS_PRODUCTION:
             },
         }
     }
+
+elif DEMO_MODE:
+    # Public demonstration: never deliver email to real recipients.
+    MAILERS = {
+        "default": {
+            "BACKEND": (
+                "django.core.mail.backends.dummy.EmailBackend"
+            ),
+        }
+    }
+
 else:
-    # Emails appear in your terminal during local development.
+    # Local development: display generated emails in the terminal.
     MAILERS = {
         "default": {
             "BACKEND": (
@@ -156,6 +180,7 @@ else:
             ),
         }
     }
+
 
 
 # --------------------------------------------------
@@ -346,9 +371,3 @@ UNFOLD = {
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}

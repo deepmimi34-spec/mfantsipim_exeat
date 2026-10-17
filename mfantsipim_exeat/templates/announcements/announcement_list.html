@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Official notices and news from Mfantsipim School, Cape Coast, Ghana.">
+    <title>{{ page_title|default:"Announcements | Mfantsipim School" }}</title>
+    <link rel="stylesheet" href="{% static 'announcements/css/announcements.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="nav-wrap">
+        <a class="brand" href="/" aria-label="Mfantsipim School home">
+            <span class="brand-name">MFANTSIPIM SCHOOL</span>
+            <span class="brand-motto">DWEN HWE KAN</span>
+        </a>
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/internal_exeat/">Internal Exeat</a>
+            <a href="{% url 'external_exeat:external_exeat_create' %}">External Exeat</a>
+            <a class="active" href="{% url 'announcements:list' %}" aria-current="page">Announcements</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="page-hero">
+        <div class="hero-inner">
+            <p class="eyebrow">Official school updates</p>
+            <h1>Announcements</h1>
+            <p>News, notices, reminders, and important updates from Mfantsipim School.</p>
+        </div>
+    </section>
+
+    <section class="content-wrap" aria-labelledby="latest-heading">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow dark-eyebrow">Stay informed</p>
+                <h2 id="latest-heading">Latest announcements</h2>
+            </div>
+            <p class="section-note">Only announcements published by authorised school staff appear here.</p>
+        </div>
+
+        {% if page_obj.object_list %}
+            <div class="announcement-grid">
+                {% for announcement in page_obj %}
+                    <article class="announcement-card">
+                        <div class="card-topline">
+                            <span class="news-label">School news</span>
+                            {% if announcement.published_at %}
+                                <time datetime="{{ announcement.published_at|date:'c' }}">
+                                    {{ announcement.published_at|date:"j M Y" }}
+                                </time>
+                            {% endif %}
+                        </div>
+                        <h3>
+                            <a href="{% url 'announcements:detail' slug=announcement.slug %}">
+                                {{ announcement.title }}
+                            </a>
+                        </h3>
+                        <p class="card-summary">
+                            {% if announcement.summary %}
+                                {{ announcement.summary }}
+                            {% else %}
+                                {{ announcement.content|truncatechars:190 }}
+                            {% endif %}
+                        </p>
+                        <div class="card-footer">
+                            <span class="author">
+                                {% if announcement.author %}
+                                    Posted by {{ announcement.author.get_full_name|default:announcement.author.username }}
+                                {% else %}
+                                    Posted by Mfantsipim School
+                                {% endif %}
+                            </span>
+                            <a class="read-link" href="{% url 'announcements:detail' slug=announcement.slug %}">
+                                Read announcement <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="pagination" aria-label="Announcement pages">
+                    {% if page_obj.has_previous %}
+                        <a class="pagination-link" href="?page={{ page_obj.previous_page_number }}">&larr; Previous</a>
+                    {% else %}
+                        <span class="pagination-link disabled">&larr; Previous</span>
+                    {% endif %}
+                    <span class="page-count">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    {% if page_obj.has_next %}
+                        <a class="pagination-link" href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>
+                    {% else %}
+                        <span class="pagination-link disabled">Next &rarr;</span>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon" aria-hidden="true">✦</div>
+                <h3>No announcements yet</h3>
+                <p>When the school publishes a notice, it will appear here.</p>
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>
+            <strong>Mfantsipim School</strong>
+            <p>“Dwen Hwe Kan” · Cape Coast, Ghana</p>
+        </div>
+        <p class="copyright">Exeat Portal &copy; {% now "Y" %}</p>
+    </div>
+</footer>
+</body>
+</html>

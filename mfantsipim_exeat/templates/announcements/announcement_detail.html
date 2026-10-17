@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ announcement.summary|default:announcement.title|truncatechars:155 }}">
+    <title>{{ page_title|default:announcement.title }}</title>
+    <link rel="stylesheet" href="{% static 'announcements/css/announcements.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="nav-wrap">
+        <a class="brand" href="/" aria-label="Mfantsipim School home">
+            <span class="brand-name">MFANTSIPIM SCHOOL</span>
+            <span class="brand-motto">DWEN HWE KAN</span>
+        </a>
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/internal_exeat/">Internal Exeat</a>
+            <a href="{% url 'external_exeat:external_exeat_create' %}">External Exeat</a>
+            <a class="active" href="{% url 'announcements:list' %}" aria-current="page">Announcements</a>
+        </nav>
+    </div>
+</header>
+
+<main class="detail-wrap">
+    <a class="back-link" href="{% url 'announcements:list' %}">&larr; Back to announcements</a>
+
+    <article class="detail-card">
+        <div class="detail-meta">
+            <span class="news-label">School news</span>
+            {% if announcement.published_at %}
+                <time datetime="{{ announcement.published_at|date:'c' }}">
+                    Published {{ announcement.published_at|date:"j F Y, g:i a" }}
+                </time>
+            {% endif %}
+        </div>
+        <h1>{{ announcement.title }}</h1>
+        {% if announcement.summary %}
+            <p class="detail-summary">{{ announcement.summary }}</p>
+        {% endif %}
+        <div class="article-body">{{ announcement.content|linebreaks }}</div>
+        <div class="article-byline">
+            {% if announcement.author %}
+                Posted by {{ announcement.author.get_full_name|default:announcement.author.username }}
+            {% else %}
+                Posted by Mfantsipim School
+            {% endif %}
+        </div>
+    </article>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>
+            <strong>Mfantsipim School</strong>
+            <p>“Dwen Hwe Kan” · Cape Coast, Ghana</p>
+        </div>
+        <p class="copyright">Exeat Portal &copy; {% now "Y" %}</p>
+    </div>
+</footer>
+</body>
+</html>
