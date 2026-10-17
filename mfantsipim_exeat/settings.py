@@ -104,7 +104,22 @@ if render_host:
 # EMAIL — DJANGO 6.1 MAILERS CONFIGURATION
 # --------------------------------------------------
 
-
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
 # --------------------------------------------------
 # EMAIL — DEMONSTRATION AND PRODUCTION CONFIGURATION
 # --------------------------------------------------
