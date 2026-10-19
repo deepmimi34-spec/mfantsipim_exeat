@@ -9,7 +9,7 @@
 <body>
 <header class="site-header"><div class="nav-container">
   <a class="brand" href="/">MFANTSIPIM SCHOOL <span>DWEN HWE KAN</span></a>
-  <nav aria-label="Main navigation"><a href="/">Home</a><a href="{% url 'guardians:dashboard' %}">Parent dashboard</a><a href="{% url 'internal_exeat:internal_exeat_create' %}">Internal exeat</a><a href="/announcements/">Announcements</a></nav>
+  <nav aria-label="Main navigation"><a href="/">Home</a><a href="{% url 'guardians:dashboard' %}">Parent dashboard</a><a href="{% url 'internal_exeat:internal_exeat' %}">Internal exeat</a><a href="/announcements/">Announcements</a></nav>
 </div></header>
 <main class="container form-page">
   {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
