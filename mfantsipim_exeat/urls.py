@@ -24,6 +24,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
 
+    path(
+        "accounts/login/",
+        TemplateView.as_view(template_name="account/login.html"),
+        name="account_login",
+    ),
+
     path('external_exeat', include('external_exeat.urls')),
     path('internal_exeat/', include('internal_exeat.urls')),
     path("announcements/", include("announcements.urls")),
