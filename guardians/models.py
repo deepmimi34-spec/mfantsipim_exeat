@@ -86,6 +86,7 @@ class GuardianInvitation(models.Model):
         return f"{self.student} — invitation to {self.guardian_email}"
 
 
+
 class StudentGuardian(models.Model):
     """Explicit authorization link between a parent account and one student."""
 
@@ -94,3 +95,73 @@ class StudentGuardian(models.Model):
         VERIFIED = "verified", "Verified"
         REJECTED = "rejected", "Rejected"
         REVOKED = "revoked", "Revoked"
+
+    class VerificationMethod(models.TextChoices):
+        INVITATION = "invitation", "School invitation"
+        STAFF = "staff", "Staff verified"
+
+    student = models.ForeignKey(
+        StudentProfile,
+        on_delete=models.PROTECT,
+        related_name="guardian_links",
+        null=True,
+        blank=True,
+    )
+
+    parent = models.ForeignKey(
+        ParentProfile,
+        on_delete=models.CASCADE,
+        related_name="student_links",
+        null=True,
+        blank=True,
+    )
+
+    relationship = models.CharField(
+        max_length=20,
+        choices=GuardianInvitation.Relationship.choices,
+        null=True,
+        blank=True,
+    )
+
+
+    status = models.CharField(
+        max_length=12,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    verification_method = models.CharField(
+        max_length=12,
+        choices=VerificationMethod.choices,
+        blank=True,
+    )
+    invitation = models.ForeignKey(
+        GuardianInvitation,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="guardian_links",
+    )
+    verified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="verified_student_guardians",
+    )
+    verified_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["student__last_name", "student__first_name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "parent"],
+                name="unique_parent_link_per_student",
+            ),
+        ]
+        verbose_name = "Student guardian link"
+        verbose_name_plural = "Student guardian links"
+
+    def __str__(self):
+        return f"{self.parent} ↔ {self.student} ({self.get_status_display()})"
