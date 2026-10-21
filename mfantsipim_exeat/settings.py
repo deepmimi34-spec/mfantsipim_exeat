@@ -222,7 +222,7 @@ AUTHENTICATION_BACKENDS = [
 ROOT_URLCONF = 'mfantsipim_exeat.urls'
 
 
-SITE_ID = 1
+SITE_ID = 2
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/parents/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
