@@ -8,6 +8,9 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils import timezone
 from unfold.admin import ModelAdmin
+from django.template.response import TemplateResponse
+from django.urls import path
+from django.contrib.admin import AdminSite
 
 from .models import GuardianInvitation, ParentProfile, StudentGuardian
 
@@ -151,3 +154,68 @@ class GuardianInvitationAdmin(ModelAdmin):
     def revoke_invitations(self, request, queryset):
         count = queryset.filter(accepted_at__isnull=True, revoked_at__isnull=True).update(revoked_at=timezone.now())
         self.message_user(request, f"Revoked {count} unused invitation(s).", messages.SUCCESS)
+
+
+# Add this to the existing admin site without creating a new one.
+_original_admin_get_urls = admin.site.get_urls
+
+
+def custom_admin_get_urls():
+    custom_urls = [
+        path(
+            "guardian-dashboard/",
+            admin.site.admin_view(guardian_dashboard_view),
+            name="guardian_dashboard",
+        ),
+    ]
+    return custom_urls + _original_admin_get_urls()
+
+
+def guardian_dashboard_view(request):
+    from accounts.models import StudentProfile
+    from external_exeat.models import ExternalExeat
+    from internal_exeat.models import InternalExeat
+
+    from .models import GuardianInvitation, ParentProfile, StudentGuardian
+
+    context = {
+        **admin.site.each_context(request),
+        "title": "Exeat Management Dashboard",
+        "total_students": StudentProfile.objects.count(),
+        "total_parents": ParentProfile.objects.count(),
+        "total_guardian_links": StudentGuardian.objects.count(),
+        "verified_links": StudentGuardian.objects.filter(
+            status=StudentGuardian.Status.VERIFIED
+        ).count(),
+        "pending_links": StudentGuardian.objects.filter(
+            status=StudentGuardian.Status.PENDING
+        ).count(),
+        "active_invitations": GuardianInvitation.objects.filter(
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+            expires_at__gt=timezone.now(),
+        ).count(),
+        "total_internal": InternalExeat.objects.count(),
+        "total_external": ExternalExeat.objects.count(),
+        "pending_internal": InternalExeat.objects.filter(
+            status="pending"
+        ).count(),
+        "pending_external": ExternalExeat.objects.filter(
+            status="pending"
+        ).count(),
+        "approved_internal": InternalExeat.objects.filter(
+            status="approved"
+        ).count(),
+        "approved_external": ExternalExeat.objects.filter(
+            status="approved"
+        ).count(),
+    }
+
+    return TemplateResponse(
+        request,
+        "admin/guardians/exeat_dashboard.html",
+        context,
+    )
+
+
+admin.site.get_urls = custom_admin_get_urls

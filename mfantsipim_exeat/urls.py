@@ -31,6 +31,12 @@ urlpatterns = [
         name="account_login",
     ),
 
+    path(
+        "about/",
+        TemplateView.as_view(template_name="about.html"),
+        name="about",
+    ),
+
     path('external_exeat', include('external_exeat.urls')),
     path('internal_exeat/', include('internal_exeat.urls')),
     path("announcements/", include("announcements.urls")),

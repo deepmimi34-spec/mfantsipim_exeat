@@ -1,0 +1,634 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Staff Dashboard | Mfantsipim School</title>
+    <style>
+        :root {
+            --crimson: #9f1239;
+            --crimson-dark: #70102b;
+            --ink: #171717;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --surface: #ffffff;
+            --page: #f5f6f8;
+            --warning: #92400e;
+            --warning-bg: #fffbeb;
+            --danger: #991b1b;
+            --danger-bg: #fef2f2;
+            --success: #166534;
+            --success-bg: #f0fdf4;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        a { color: var(--crimson); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .topbar {
+            background: var(--ink);
+            color: white;
+            border-bottom: 4px solid var(--crimson);
+        }
+
+        .topbar-inner {
+            max-width: 1440px;
+            margin: auto;
+            padding: 17px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            color: white;
+            font-weight: 800;
+            letter-spacing: .06em;
+        }
+
+        .brand span {
+            display: block;
+            font-size: .72rem;
+            color: #fda4af;
+            letter-spacing: .16em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .nav-links a { color: white; font-size: .92rem; }
+
+        .page {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 28px 24px 48px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            margin: 0 0 5px;
+            color: var(--crimson);
+            font-weight: 800;
+            font-size: .76rem;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+        }
+
+        h1, h2, h3, p { margin-top: 0; }
+        h1 { margin-bottom: 8px; font-size: clamp(1.7rem, 3vw, 2.4rem); }
+        h2 { margin-bottom: 5px; font-size: 1.15rem; }
+        h3 { margin-bottom: 6px; font-size: 1rem; }
+        .muted { color: var(--muted); font-size: .9rem; }
+
+        .button {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: .88rem;
+            border: 1px solid var(--line);
+            background: white;
+        }
+
+        .button-primary {
+            color: white;
+            background: var(--crimson);
+            border-color: var(--crimson);
+        }
+
+        .button-primary:hover {
+            color: white;
+            background: var(--crimson-dark);
+            text-decoration: none;
+        }
+
+        .button-light { color: var(--ink); }
+
+        .alert-grid, .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card, .panel, .alert-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgb(0 0 0 / 3%);
+        }
+
+        .stat-card { padding: 19px; }
+        .stat-label { color: var(--muted); font-size: .86rem; }
+        .stat-number { display: block; margin: 8px 0 5px; font-size: 2rem; font-weight: 800; }
+        .stat-foot { font-size: .8rem; color: var(--muted); }
+
+        .stat-card.accent { border-top: 4px solid var(--crimson); }
+        .stat-card.warning { border-top: 4px solid #d97706; }
+        .stat-card.danger { border-top: 4px solid #dc2626; }
+        .stat-card.success { border-top: 4px solid #16a34a; }
+
+        .alert-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+        .alert-card { padding: 17px; }
+        .alert-card.warning { background: var(--warning-bg); border-color: #fde68a; }
+        .alert-card.danger { background: var(--danger-bg); border-color: #fecaca; }
+        .alert-card.success { background: var(--success-bg); border-color: #bbf7d0; }
+        .alert-number { font-size: 1.7rem; font-weight: 800; margin: 4px 0; }
+        .alert-card p { margin-bottom: 10px; font-size: .88rem; }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .panel { padding: 20px; min-width: 0; margin-bottom: 22px; }
+        .section-grid .panel { margin-bottom: 0; }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .panel-heading p { margin-bottom: 0; }
+        .chart-wrap { position: relative; min-height: 280px; }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .quick-link {
+            display: block;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--ink);
+            background: #fff;
+        }
+
+        .quick-link strong { display: block; margin-bottom: 4px; color: var(--crimson); }
+        .quick-link span { color: var(--muted); font-size: .82rem; }
+
+        .table-wrap { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+        th { color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+        tbody tr:last-child td { border-bottom: 0; }
+        .empty { padding: 20px 10px; color: var(--muted); text-align: center; }
+
+        .status {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 4px 9px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: .76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-pending, .status-under_review { background: var(--warning-bg); color: var(--warning); }
+        .status-approved, .status-verified { background: var(--success-bg); color: var(--success); }
+        .status-rejected, .status-failed { background: var(--danger-bg); color: var(--danger); }
+
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        @media (max-width: 1000px) {
+            .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .section-grid { grid-template-columns: 1fr; }
+            .quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 650px) {
+            .topbar-inner { align-items: flex-start; flex-direction: column; padding: 16px; }
+            .page { padding: 22px 14px 36px; }
+            .stat-grid, .alert-grid, .quick-links { grid-template-columns: 1fr; }
+            .panel { padding: 15px; }
+            .stat-number { font-size: 1.7rem; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="{% url 'staff_dashboard' %}">
+            MFANTSIPIM SCHOOL
+            <span>DWEN HWE KAN · STAFF ADMINISTRATION</span>
+        </a>
+        <nav class="nav-links" aria-label="Staff navigation">
+            <a href="{% url 'staff_dashboard' %}">Dashboard</a>
+            <a href="/admin/">Django Admin</a>
+            <a href="/announcements/">Announcements</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">School operations overview</p>
+            <h1>Staff Dashboard</h1>
+            <p class="muted">A central summary of student records, guardian verification, and exeat activity.</p>
+        </div>
+        <a class="button button-primary" href="/admin/">Open Django Admin</a>
+    </section>
+
+    <section class="stat-grid" aria-label="System statistics">
+        <article class="stat-card accent">
+            <span class="stat-label">Registered students</span>
+            <strong class="stat-number">{{ total_students }}</strong>
+            <span class="stat-foot">Student records in the database</span>
+        </article>
+        <article class="stat-card accent">
+            <span class="stat-label">Parent profiles</span>
+            <strong class="stat-number">{{ total_parents }}</strong>
+            <span class="stat-foot">{{ active_accounts }} active user accounts overall</span>
+        </article>
+        <article class="stat-card warning">
+            <span class="stat-label">Pending child links</span>
+            <strong class="stat-number">{{ pending_links }}</strong>
+            <span class="stat-foot">{{ verified_links }} verified · {{ rejected_links }} rejected</span>
+        </article>
+        <article class="stat-card danger">
+            <span class="stat-label">Exeat requests to review</span>
+            <strong class="stat-number">{{ pending_exeats }}</strong>
+            <span class="stat-foot">Internal and external combined</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">All exeat requests</span>
+            <strong class="stat-number">{{ total_exeats }}</strong>
+            <span class="stat-foot">{{ total_internal }} internal · {{ total_external }} external</span>
+        </article>
+        <article class="stat-card success">
+            <span class="stat-label">Approved exeats</span>
+            <strong class="stat-number">{{ approved_exeats }}</strong>
+            <span class="stat-foot">Requests with approved status</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-label">Rejected exeats</span>
+            <strong class="stat-number">{{ rejected_exeats }}</strong>
+            <span class="stat-foot">Internal and external combined</span>
+        </article>
+        <article class="stat-card warning">
+            <span class="stat-label">Awaiting parent confirmation</span>
+            <strong class="stat-number">{{ awaiting_parent_confirmation }}</strong>
+            <span class="stat-foot">Official contact verification still pending</span>
+        </article>
+    </section>
+
+    <section class="alert-grid" aria-label="Items requiring attention">
+        <article class="alert-card warning">
+            <h2>Parent–child verification</h2>
+            <div class="alert-number">{{ pending_links }}</div>
+            <p>Link requests waiting for staff review.</p>
+            <a href="/admin/guardians/studentguardian/">Review guardian links →</a>
+        </article>
+        <article class="alert-card danger">
+            <h2>Exeat requests</h2>
+            <div class="alert-number">{{ pending_exeats }}</div>
+            <p>Requests pending review or currently under review.</p>
+            <a href="/admin/internal_exeat/internalexeat/">Internal requests →</a>
+            <br>
+            <a href="/admin/external_exeat/externalexeat/">External requests →</a>
+        </article>
+        <article class="alert-card success">
+            <h2>Guardian invitations</h2>
+            <div class="alert-number">{{ active_invitations }}</div>
+            <p>Invitations not yet accepted, revoked, or expired.</p>
+            <a href="/admin/guardians/guardianinvitation/">Manage invitations →</a>
+        </article>
+    </section>
+
+    <section class="section-grid">
+        <article class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Exeat activity</h2>
+                    <p class="muted">New requests by month over the last six months.</p>
+                </div>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="exeatChart" aria-label="Monthly internal and external exeat requests" role="img"></canvas>
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Quick access</h2>
+                    <p class="muted">Jump directly to common staff tasks.</p>
+                </div>
+            </div>
+            <div class="quick-links">
+                <a class="quick-link" href="/admin/accounts/studentprofile/">
+                    <strong>Students</strong><span>View student records</span>
+                </a>
+                <a class="quick-link" href="/admin/guardians/parentprofile/">
+                    <strong>Parents</strong><span>Manage parent profiles</span>
+                </a>
+                <a class="quick-link" href="/admin/guardians/studentguardian/">
+                    <strong>Child links</strong><span>Verify relationships</span>
+                </a>
+                <a class="quick-link" href="/admin/guardians/guardianinvitation/">
+                    <strong>Invitations</strong><span>Issue and track invitations</span>
+                </a>
+                <a class="quick-link" href="/admin/internal_exeat/internalexeat/">
+                    <strong>Internal exeats</strong><span>Review internal requests</span>
+                </a>
+                <a class="quick-link" href="/admin/external_exeat/externalexeat/">
+                    <strong>External exeats</strong><span>Review external requests</span>
+                </a>
+            </div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Pending parent–child links</h2>
+                <p class="muted">The school should verify the relationship before granting portal access.</p>
+            </div>
+            <a class="button button-light" href="/admin/guardians/studentguardian/">View all links</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>Student</th><th>Parent account</th><th>Relationship</th><th>Submitted</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                {% for link in recent_pending_links %}
+                    <tr>
+                        <td>
+                            {% if link.student %}
+                                {{ link.student.first_name }} {{ link.student.last_name }}
+                                {% if link.student.admission_number %}
+                                    <br><span class="muted">{{ link.student.admission_number }}</span>
+                                {% endif %}
+                            {% else %}
+                                Student record unavailable
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if link.parent and link.parent.user %}
+                                {{ link.parent.user.get_full_name|default:link.parent.user.email }}
+                            {% else %}
+                                Parent account unavailable
+                            {% endif %}
+                        </td>
+                        <td>{{ link.get_relationship_display|default:"Not specified" }}</td>
+                        <td>{{ link.created_at|date:"d M Y, H:i"|default:"—" }}</td>
+                        <td><span class="status status-{{ link.status }}">{{ link.get_status_display }}</span></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="empty">There are no pending parent–child link requests.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Internal exeats awaiting review</h2>
+                <p class="muted">The latest internal requests that need staff attention.</p>
+            </div>
+            <a class="button button-light" href="/admin/internal_exeat/internalexeat/">View all</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>Student</th><th>Purpose</th><th>Departure</th><th>Parent check</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                {% for item in recent_internal_pending %}
+                    <tr>
+                        <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                        <td>{{ item.purpose }}</td>
+                        <td>{{ item.departure_date|date:"d M Y" }} {{ item.departure_time|time:"H:i" }}</td>
+                        <td>{{ item.get_parent_verification_status_display }}</td>
+                        <td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="empty">No internal exeats are waiting for review.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>External exeats awaiting review</h2>
+                <p class="muted">External requests, including their intended destination.</p>
+            </div>
+            <a class="button button-light" href="/admin/external_exeat/externalexeat/">View all</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>Student</th><th>Destination</th><th>Departure</th><th>Parent check</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                {% for item in recent_external_pending %}
+                    <tr>
+                        <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                        <td>{{ item.destination }}</td>
+                        <td>{{ item.departure_date|date:"d M Y" }} {{ item.departure_time|time:"H:i" }}</td>
+                        <td>{{ item.get_parent_verification_status_display }}</td>
+                        <td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="empty">No external exeats are waiting for review.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section-grid">
+        <article class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Upcoming approved internal departures</h2>
+                    <p class="muted">Today through the next seven days.</p>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Student</th><th>Departure</th><th>Return</th></tr></thead>
+                    <tbody>
+                    {% for item in upcoming_internal %}
+                        <tr>
+                            <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                            <td>{{ item.departure_date|date:"d M" }} {{ item.departure_time|time:"H:i" }}</td>
+                            <td>{{ item.return_date|date:"d M" }} {{ item.return_time|time:"H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="empty">No upcoming approved internal departures.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Upcoming approved external departures</h2>
+                    <p class="muted">Today through the next seven days.</p>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Student</th><th>Destination</th><th>Departure</th></tr></thead>
+                    <tbody>
+                    {% for item in upcoming_external %}
+                        <tr>
+                            <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                            <td>{{ item.destination }}</td>
+                            <td>{{ item.departure_date|date:"d M" }} {{ item.departure_time|time:"H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="empty">No upcoming approved external departures.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Approved exeats past their return time</h2>
+                <p class="muted">Check these records with the relevant house or school staff. A past return time alone does not confirm that a student is absent.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Type</th><th>Student</th><th>Return due</th><th>Destination</th></tr></thead>
+                <tbody>
+                {% for item in overdue_returns %}
+                    <tr>
+                        <td>Internal</td>
+                        <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                        <td>{{ item.return_date|date:"d M Y" }} {{ item.return_time|time:"H:i" }}</td>
+                        <td>{{ item.destination|default:"—" }}</td>
+                    </tr>
+                {% endfor %}
+                {% for item in overdue_external %}
+                    <tr>
+                        <td>External</td>
+                        <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+                        <td>{{ item.return_date|date:"d M Y" }} {{ item.return_time|time:"H:i" }}</td>
+                        <td>{{ item.destination }}</td>
+                    </tr>
+                {% endfor %}
+                {% if not overdue_returns and not overdue_external %}
+                    <tr><td colspan="4" class="empty">No approved exeats have passed their recorded return time.</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <strong>Mfantsipim School</strong><br>
+    “Dwen Hwe Kan” · Cape Coast, Ghana<br>
+    Staff dashboard · {% now "Y" %}
+</footer>
+
+<script>
+    const chartLabels = JSON.parse(
+        document.getElementById("chart-labels-data")?.textContent || "[]"
+    );
+</script>
+
+<script id="chart-labels-data" type="application/json">{{ chart_labels_json|safe }}</script>
+<script id="chart-internal-data" type="application/json">{{ chart_internal_json|safe }}</script>
+<script id="chart-external-data" type="application/json">{{ chart_external_json|safe }}</script>
+
+<script>
+    const labels = JSON.parse(document.getElementById("chart-labels-data").textContent);
+    const internalData = JSON.parse(document.getElementById("chart-internal-data").textContent);
+    const externalData = JSON.parse(document.getElementById("chart-external-data").textContent);
+
+    const chartCanvas = document.getElementById("exeatChart");
+    if (chartCanvas && window.Chart) {
+        new Chart(chartCanvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Internal exeats",
+                        data: internalData,
+                        backgroundColor: "#9f1239",
+                        borderRadius: 5
+                    },
+                    {
+                        label: "External exeats",
+                        data: externalData,
+                        backgroundColor: "#374151",
+                        borderRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                },
+                plugins: {
+                    legend: { position: "bottom" }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -109,53 +109,30 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "webmaster@localhost" if not IS_PRODUCTION else "",
 )
 
+
+
+# Keep your existing IS_PRODUCTION definition.
+# It should be True only when running in production.
+
 if IS_PRODUCTION:
-    required_email_settings = [
-        "SMTP_HOST",
-        "SMTP_USERNAME",
-        "SMTP_PASSWORD",
-    ]
-
-    missing_email_settings = [
-        name
-        for name in required_email_settings
-        if not os.environ.get(name)
-    ]
-
-    if not DEFAULT_FROM_EMAIL:
-        missing_email_settings.append("DEFAULT_FROM_EMAIL")
-
-    if missing_email_settings:
-        raise ImproperlyConfigured(
-            "Missing production email settings: "
-            + ", ".join(missing_email_settings)
-        )
-
-    MAILERS = {
-        "default": {
-            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
-            "OPTIONS": {
-                "host": os.environ["SMTP_HOST"],
-                "port": int(os.environ.get("SMTP_PORT", "587")),
-                "username": os.environ["SMTP_USERNAME"],
-                "password": os.environ["SMTP_PASSWORD"],
-                "use_tls": (
-                    os.environ.get("SMTP_USE_TLS", "true").lower()
-                    in {"true", "1", "yes"}
-                ),
-                "timeout": 20,
-            },
-        }
-    }
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ["SMTP_HOST"]
+    EMAIL_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    EMAIL_HOST_USER = os.environ["SMTP_USERNAME"]
+    EMAIL_HOST_PASSWORD = os.environ["SMTP_PASSWORD"]
+    EMAIL_USE_TLS = (
+        os.environ.get("SMTP_USE_TLS", "true").lower()
+        in {"true", "1", "yes"}
+    )
+    EMAIL_TIMEOUT = 20
+    DEFAULT_FROM_EMAIL = os.environ.get(
+        "DEFAULT_FROM_EMAIL",
+        EMAIL_HOST_USER,
+    )
 else:
-    # Emails appear in your terminal during local development.
-    MAILERS = {
-        "default": {
-            "BACKEND": (
-                "django.core.mail.backends.console.EmailBackend"
-            ),
-        }
-    }
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "webmaster@localhost"
+
 
 
 # --------------------------------------------------
@@ -333,22 +310,32 @@ UNFOLD = {
     "SITE_HEADER": "Mfantsipim Exeat System",
     "SITE_SUBHEADER": "Content Management System",
     "SITE_URL": "/",
-
-
-
     "SITE_SYMBOL": "book",
-
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
 
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Exeat Management",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "icon": "dashboard",
+                        "link": "/admin/guardian-dashboard/",
+                    },
+                ],
+            },
+        ],
+    },
 }
+
 
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+

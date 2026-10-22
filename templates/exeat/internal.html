@@ -17,7 +17,7 @@
   {% if not has_verified_children %}
     <div class="notice"><strong>No verified child is linked to your account.</strong> You must accept a school-issued guardian invitation before submitting an exeat request. Contact the school office if you need help.</div>
   {% else %}
-    <form method="post" action="{% url 'internal_exeat:internal_exeat_create' %}" class="exeat-form">
+    <form method="post" action="{% url 'internal_exeat:internal_exeat' %}" class="exeat-form">
       {% csrf_token %}
       {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
       <section class="form-section"><h2>Student information</h2><p class="section-help">Only students linked to your verified parent account are available.</p>

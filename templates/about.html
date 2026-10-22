@@ -1,0 +1,708 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how parents can verify their accounts and link their children to the Mfantsipim School Exeat Portal.">
+    <title>About | Mfantsipim School Exeat Portal</title>
+
+    <style>
+        :root {
+            --crimson: #8b1538;
+            --dark-crimson: #5d0c24;
+            --gold: #d5b778;
+            --light: #f7f5f2;
+            --white: #ffffff;
+            --text: #252525;
+            --muted: #686868;
+            --border: #eadfe3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--light);
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .site-header {
+            background: var(--dark-crimson);
+            color: var(--white);
+            padding: 18px 7%;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            color: var(--white);
+            font-weight: 800;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .brand span {
+            display: block;
+            color: var(--gold);
+            font-size: .72rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--white);
+            font-size: .92rem;
+        }
+
+        nav a:hover,
+        nav a[aria-current="page"] {
+            color: var(--gold);
+        }
+
+        .hero {
+            background: linear-gradient(
+                115deg,
+                rgba(55, 5, 23, .98),
+                rgba(139, 21, 56, .91)
+            );
+            color: var(--white);
+            padding: 82px 7%;
+        }
+
+        .hero-content,
+        .container {
+            max-width: 1120px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: .8rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            max-width: 800px;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero p {
+            max-width: 760px;
+            color: #f2e8ec;
+            font-size: 1.05rem;
+            margin-bottom: 26px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            transition: .2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--gold);
+            color: var(--dark-crimson);
+        }
+
+        .button-outline {
+            border: 1px solid var(--white);
+            color: var(--white);
+        }
+
+        .section {
+            padding: 64px 7%;
+        }
+
+        .section-heading {
+            max-width: 750px;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            color: var(--dark-crimson);
+            font-size: clamp(1.7rem, 3vw, 2.2rem);
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .feature-card,
+        .step-card,
+        .faq-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #f5e5eb;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3,
+        .step-card h3,
+        .faq-item h3 {
+            color: var(--dark-crimson);
+            margin-bottom: 9px;
+            font-size: 1.12rem;
+        }
+
+        .feature-card p,
+        .step-card p,
+        .faq-item p {
+            color: var(--muted);
+            font-size: .96rem;
+        }
+
+        .process-section {
+            background: #eee8e8;
+        }
+
+        .process-block {
+            margin-top: 38px;
+        }
+
+        .process-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .process-title .number {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--crimson);
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .process-title h3 {
+            color: var(--dark-crimson);
+            font-size: 1.5rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .step-label {
+            display: inline-block;
+            color: var(--crimson);
+            font-size: .78rem;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .notice {
+            margin-top: 24px;
+            padding: 18px 20px;
+            background: var(--white);
+            border-left: 4px solid var(--gold);
+            border-radius: 5px;
+            color: #494047;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .final-cta {
+            padding: 48px 7%;
+            background: var(--dark-crimson);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            margin-bottom: 10px;
+        }
+
+        .final-cta p {
+            max-width: 680px;
+            margin: 0 auto 22px;
+            color: #f2e8ec;
+        }
+
+        footer {
+            background: #310714;
+            color: var(--white);
+            padding: 25px 7%;
+            text-align: center;
+        }
+
+        footer strong {
+            color: var(--gold);
+        }
+
+        footer p {
+            color: #eadfe3;
+            font-size: .88rem;
+        }
+
+        @media (max-width: 850px) {
+            .nav-container {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid,
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 60px;
+                padding-bottom: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-header {
+                padding: 18px 5%;
+            }
+
+            nav ul {
+                gap: 10px 15px;
+            }
+
+            nav a {
+                font-size: .85rem;
+            }
+
+            .hero,
+            .section,
+            .final-cta {
+                padding-left: 6%;
+                padding-right: 6%;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header class="site-header">
+    <div class="nav-container">
+        <a class="brand" href="/" aria-label="Mfantsipim Exeat Portal home">
+            MFANTSI­PIM EXEAT PORTAL
+            <span>DWEN HWE KAN</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about/" aria-current="page">About</a></li>
+                <li>
+                    <a href="{% url 'internal_exeat:internal_exeat' %}">
+                        Internal Exeat
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'external_exeat:external_exeat_create' %}">
+                        External Exeat
+                    </a>
+                </li>
+                <li><a href="/announcements/">Announcements</a></li>
+                <li><a href="/accounts/login/">Parent Login</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">About the portal</p>
+            <h1>A secure connection between <span>parents, students and school.</span></h1>
+            <p>
+                The Mfantsipim School Exeat Portal is designed to make exeat
+                requests more organised and accessible. Parents can sign in,
+                establish a verified connection with their child, and access
+                the relevant services available through the portal.
+            </p>
+
+            <div class="actions">
+                <a href="/accounts/login/" class="button button-primary">
+                    Sign in to the Portal
+                </a>
+                <a href="#verification" class="button button-outline">
+                    See How Verification Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>What can you do here?</h2>
+                <p>
+                    The portal brings important parent-facing services into
+                    one place, with verification intended to help protect
+                    student information and exeat requests.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">🔐</div>
+                    <h3>Parent account verification</h3>
+                    <p>
+                        Sign in with an eligible Google account and follow the
+                        school's process for confirming your identity and
+                        eligibility to use the parent portal.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">👨‍👩‍👦</div>
+                    <h3>Link to your child</h3>
+                    <p>
+                        Provide the student's admission number and full name
+                        so the school can check the student record and review
+                        your request to be linked as a parent or guardian.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">📋</div>
+                    <h3>Exeat services</h3>
+                    <p>
+                        Once the necessary access and student link have been
+                        approved, use the available internal or external
+                        exeat services according to school procedures.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="process-section section" id="verification">
+        <div class="container">
+            <div class="section-heading">
+                <h2>How to get verified</h2>
+                <p>
+                    Follow these steps to establish your parent portal access.
+                    Verification may require action by the school's authorised
+                    staff.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+                <article class="step-card">
+                    <span class="step-label">STEP 01</span>
+                    <h3>Use the correct Google account</h3>
+                    <p>
+                        Open the Parent Login page and sign in with the Google
+                        account registered or approved for use with the school.
+                        Signing in proves access to that account; it does not
+                        by itself verify that you are a student's parent.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 02</span>
+                    <h3>Check your invitation</h3>
+                    <p>
+                        Follow the school's parent invitation process if you
+                        have been invited. If you have not received an
+                        invitation or cannot sign in, contact the school
+                        through its official channels for assistance.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 03</span>
+                    <h3>Provide accurate parent details</h3>
+                    <p>
+                        Complete the parent information requested by the
+                        portal. Make sure the details you submit are accurate
+                        and consistent with the school's official records.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 04</span>
+                    <h3>Wait for the school's review</h3>
+                    <p>
+                        School staff may check your information against
+                        authorised records and contact you using the phone
+                        number held by the school to confirm your identity
+                        and relationship to the student.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 05</span>
+                    <h3>Receive a verification decision</h3>
+                    <p>
+                        Follow any instructions given by the school. If more
+                        information is required or verification is not
+                        approved, contact the school for clarification rather
+                        than submitting conflicting details.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 06</span>
+                    <h3>Open your parent dashboard</h3>
+                    <p>
+                        After your account is approved and the relevant access
+                        has been enabled, sign in and check your dashboard for
+                        the next steps.
+                    </p>
+                </article>
+            </div>
+
+            <div class="notice">
+                <strong>Important:</strong> Never share your Google password
+                or verification codes with anyone claiming to be school staff.
+                Use the school's official contact channels if you need help.
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="link-child">
+        <div class="container">
+            <div class="section-heading">
+                <h2>How to get linked to your child</h2>
+                <p>
+                    Account verification and child linking are separate checks.
+                    A verified parent account should only access a student
+                    after the parent–student relationship has been reviewed
+                    and approved.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+                <article class="step-card">
+                    <span class="step-label">STEP 01</span>
+                    <h3>Sign in to your verified account</h3>
+                    <p>
+                        Open your parent dashboard using the Google account
+                        approved for the portal.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 02</span>
+                    <h3>Start a child-link request</h3>
+                    <p>
+                        Use the child-link or add-student option if it is
+                        available on your dashboard. If you cannot find it,
+                        contact the school for the approved linking procedure.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 03</span>
+                    <h3>Enter the student's details</h3>
+                    <p>
+                        Enter the student's admission number and full name
+                        exactly as recorded by the school. Check the details
+                        before submitting the request.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 04</span>
+                    <h3>Choose your relationship</h3>
+                    <p>
+                        Select the appropriate relationship, such as parent
+                        or guardian, when the form asks for it. Provide only
+                        information you are authorised to submit.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 05</span>
+                    <h3>Allow the school to verify the link</h3>
+                    <p>
+                        The student details should be checked against the
+                        school's records. Staff may confirm the relationship
+                        using the parent contact information held by the
+                        school before approving the link.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-label">STEP 06</span>
+                    <h3>Check your dashboard</h3>
+                    <p>
+                        Once the school approves the request, check whether
+                        the child appears in your linked-students section.
+                        If the details do not match or the request is pending,
+                        contact the school for assistance.
+                    </p>
+                </article>
+            </div>
+
+            <div class="notice">
+                <strong>Privacy and safety:</strong> Knowing a student's
+                admission number and name is not sufficient proof of a
+                parent–student relationship. The school should approve the
+                link before student-specific information or exeat actions
+                become available.
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Frequently asked questions</h2>
+                <p>Quick answers to common questions about parent access.</p>
+            </div>
+
+            <div class="faq-grid">
+                <article class="faq-item">
+                    <h3>Does Google sign-in verify me as a parent?</h3>
+                    <p>
+                        No. Google sign-in authenticates your account.
+                        The school must separately verify your eligibility
+                        and relationship to the student.
+                    </p>
+                </article>
+
+                <article class="faq-item">
+                    <h3>What if the student's name is not recognised?</h3>
+                    <p>
+                        Check the admission number and full name against
+                        official school information. If they are correct,
+                        contact the school to check the student record.
+                    </p>
+                </article>
+
+                <article class="faq-item">
+                    <h3>Can I link more than one child?</h3>
+                    <p>
+                        Ask the school to confirm the procedure for linking
+                        additional children. Each parent–student relationship
+                        should be reviewed and approved separately.
+                    </p>
+                </article>
+
+                <article class="faq-item">
+                    <h3>What if my request is still pending?</h3>
+                    <p>
+                        A pending request has not yet been approved. Contact
+                        the school through its official channels if you need
+                        an update or believe the information is incorrect.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to access the parent portal?</h2>
+            <p>
+                Sign in with your approved account. If you still need
+                verification or a child link, follow the school's process
+                before submitting student-related requests.
+            </p>
+            <div class="actions" style="justify-content:center">
+                <a href="/accounts/login/" class="button button-primary">
+                    Parent Login
+                </a>
+                <a href="/parents/dashboard/" class="button button-outline">
+                    Parent Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p><strong>Mfantsipim School Exeat Portal</strong></p>
+    <p>Dwen Hwe Kan · Parent access, student links and exeat services</p>
+</footer>
+</body>
+</html>

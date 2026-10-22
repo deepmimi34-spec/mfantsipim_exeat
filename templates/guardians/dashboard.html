@@ -1,89 +1,408 @@
+```html
 {% load static %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Parent dashboard | Mfantsipim School</title>
+
+  <title>Parent Dashboard | Mfantsipim School</title>
+
   <link rel="stylesheet" href="{% static 'guardians/css/portal.css' %}">
 </head>
+
 <body>
   <header class="site-header">
     <div class="nav-container">
-      <a class="brand" href="/">MFANTSIPIM SCHOOL <span>DWEN HWE KAN</span></a>
+      <a class="brand" href="/">
+        MFANTSIPIM SCHOOL
+        <span>DWEN HWE KAN</span>
+      </a>
+
       <nav aria-label="Main navigation">
         <a href="/">Home</a>
-        <a href="{% url 'guardians:dashboard' %}" aria-current="page">Parent dashboard</a>
+
+        <a href="{% url 'guardians:dashboard' %}"
+           aria-current="page">Dashboard</a>
+
+        <a href="{% url 'guardians:link_child' %}">Link a Child</a>
+
+        <a href="/about/">About</a>
+
         <a href="/announcements/">Announcements</a>
-        <form class="inline-form" method="post" action="{% url 'account_logout' %}">
-          {% csrf_token %}<button class="nav-button" type="submit">Sign out</button>
+
+        <form class="inline-form"
+              method="post"
+              action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <button class="nav-button" type="submit">Sign out</button>
         </form>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+
+    {% if messages %}
+      <div class="messages" aria-live="polite">
+        {% for message in messages %}
+          <p class="message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Welcome -->
     <section class="welcome-panel">
-      <p class="eyebrow">Secure parent portal</p>
-      <h1>Welcome{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}</h1>
-      <p>Signed in as <strong>{{ request.user.email }}</strong>. Student information is shown only where the school has verified your guardian link.</p>
+      <p class="eyebrow">Secure Parent Portal</p>
+
+      <h1>
+        Welcome{% if request.user.first_name %},
+        {{ request.user.first_name }}{% endif %}
+      </h1>
+
+      <p>
+        Signed in as <strong>{{ request.user.email }}</strong>.
+        Manage your child's exeat requests, check their status,
+        and access parent services from this dashboard.
+      </p>
+
+      <div class="card-actions">
+        <a class="button button-primary"
+           href="{% url 'guardians:link_child' %}">
+          Link Your Child
+        </a>
+
+        <a class="button button-secondary" href="/about/">
+          How It Works
+        </a>
+      </div>
     </section>
 
+    <!-- Quick access -->
     <section class="content-section">
       <div class="section-heading">
-        <div><h2>Your linked children</h2><p>Choose a service to request an exeat for a verified child.</p></div>
+        <div>
+          <h2>Quick Access</h2>
+          <p>Navigate directly to the service you need.</p>
+        </div>
       </div>
+
+      <div class="card-grid">
+
+        <article class="portal-card">
+          <h3>Link a Child</h3>
+          <p>
+            Submit a request to connect your parent account
+            to a student's school record.
+          </p>
+          <a class="button button-primary"
+             href="{% url 'guardians:link_child' %}">
+            Link Child →
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <h3>Internal Exeat</h3>
+          <p>
+            Access the internal exeat application for a
+            child whose guardian link has been verified.
+          </p>
+          <a class="button button-primary"
+             href="{% url 'internal_exeat:internal_exeat' %}">
+            Apply for Internal Exeat →
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <h3>External Exeat</h3>
+          <p>
+            Submit an external exeat request and provide
+            the required departure and return details.
+          </p>
+          <a class="button button-secondary"
+             href="{% url 'external_exeat:external_exeat_create' %}">
+            Apply for External Exeat →
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <h3>Parent Verification Guide</h3>
+          <p>
+            Learn how student matching, school verification,
+            and guardian approval work.
+          </p>
+          <a class="button button-secondary" href="/about/">
+            Read the Guide →
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <h3>School Announcements</h3>
+          <p>
+            Read school notices and announcements relevant
+            to parents and students.
+          </p>
+          <a class="button button-secondary" href="/announcements/">
+            View Announcements →
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <h3>Need Assistance?</h3>
+          <p>
+            If your child is missing from your account or
+            your verification is delayed, contact the school
+            office using its official contact details.
+          </p>
+          <a class="button button-secondary" href="/about/">
+            Help and Information →
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Linked children -->
+    <section class="content-section">
+      <div class="section-heading">
+        <div>
+          <h2>Your Linked Children</h2>
+          <p>
+            Student details and exeat services are available
+            according to your verified access.
+          </p>
+        </div>
+
+        <a href="{% url 'guardians:link_child' %}">
+          + Link another child
+        </a>
+      </div>
+
       <div class="card-grid">
         {% for link in children %}
           <article class="portal-card child-card">
-            <div class="avatar-mark" aria-hidden="true">{{ link.student.first_name|first|upper }}{{ link.student.last_name|first|upper }}</div>
-            <h3>{{ link.student.first_name }} {{ link.student.last_name }}</h3>
-            <p class="muted">{{ link.student.current_classroom }}{% if link.student.house %} · {{ link.student.house }}{% endif %}</p>
-            <p class="relationship">{{ link.get_relationship_display }} · Verified</p>
-            <div class="card-actions">
-              <a class="button button-primary" href="{% url 'internal_exeat:internal_exeat_create' %}">Internal exeat</a>
-              <a class="button button-secondary" href="{% url 'external_exeat:external_exeat_create' %}">External exeat</a>
+
+            <div class="avatar-mark" aria-hidden="true">
+              {{ link.student.first_name|first|upper }}{{ link.student.last_name|first|upper }}
             </div>
+
+            <h3>
+              {{ link.student.first_name }}
+              {{ link.student.last_name }}
+            </h3>
+
+            <p class="muted">
+              {{ link.student.current_classroom }}
+              {% if link.student.house %}
+                · {{ link.student.house }}
+              {% endif %}
+            </p>
+
+            <p class="relationship">
+              {{ link.get_relationship_display }} · Verified
+            </p>
+
+            <div class="card-actions">
+              <a class="button button-primary"
+                 href="{% url 'internal_exeat:internal_exeat' %}">
+                Internal Exeat
+              </a>
+
+              <a class="button button-secondary"
+                 href="{% url 'external_exeat:external_exeat_create' %}">
+                External Exeat
+              </a>
+            </div>
+
           </article>
+
         {% empty %}
           <div class="empty-state">
             <h3>No verified children linked yet</h3>
-            <p>Your child will appear here after you accept a valid school-issued invitation using the invited Google account. Contact the school office if you believe a link is missing.</p>
+
+            <p>
+              To get started, submit a child-linking request.
+              The school must verify your relationship before
+              granting access to the student's records.
+            </p>
+
+            <p>
+              <a href="{% url 'guardians:link_child' %}">
+                Start the child-linking process →
+              </a>
+            </p>
+
+            <p>
+              Need help?
+              <a href="/about/">Read the parent verification guide</a>
+              or contact the school office.
+            </p>
           </div>
         {% endfor %}
       </div>
     </section>
 
+    <!-- Internal exeat history -->
     <section class="content-section">
-      <div class="section-heading"><div><h2>Recent internal exeat requests</h2><p>Requests for your verified children.</p></div></div>
+      <div class="section-heading">
+        <div>
+          <h2>Recent Internal Exeat Requests</h2>
+          <p>Review the latest internal exeat applications.</p>
+        </div>
+
+        <a href="{% url 'internal_exeat:internal_exeat' %}">
+          New internal request →
+        </a>
+      </div>
+
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Student</th><th>Purpose</th><th>Departure</th><th>Return</th><th>Status</th><th>Parent check</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Purpose</th>
+              <th>Departure</th>
+              <th>Return</th>
+              <th>Status</th>
+              <th>Parent Check</th>
+            </tr>
+          </thead>
+
           <tbody>
             {% for item in internal_requests %}
-              <tr><td>{{ item.student.first_name }} {{ item.student.last_name }}</td><td>{{ item.purpose }}</td><td>{{ item.departure_date }} {{ item.departure_time }}</td><td>{{ item.return_date }} {{ item.return_time }}</td><td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td><td>{{ item.get_parent_verification_status_display }}</td></tr>
-            {% empty %}<tr><td colspan="6" class="table-empty">No internal exeat requests yet.</td></tr>{% endfor %}
+              <tr>
+                <td>
+                  {{ item.student.first_name }}
+                  {{ item.student.last_name }}
+                </td>
+                <td>{{ item.purpose }}</td>
+                <td>
+                  {{ item.departure_date }}
+                  {{ item.departure_time }}
+                </td>
+                <td>
+                  {{ item.return_date }}
+                  {{ item.return_time }}
+                </td>
+                <td>
+                  <span class="status status-{{ item.status }}">
+                    {{ item.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  {{ item.get_parent_verification_status_display }}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="table-empty">
+                  No internal exeat requests yet.
+                  <a href="{% url 'internal_exeat:internal_exeat' %}">
+                    Submit your first request.
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
     </section>
 
+    <!-- External exeat history -->
     <section class="content-section">
-      <div class="section-heading"><div><h2>Recent external exeat requests</h2><p>Requests for your verified children.</p></div></div>
+      <div class="section-heading">
+        <div>
+          <h2>Recent External Exeat Requests</h2>
+          <p>Review the latest external exeat applications.</p>
+        </div>
+
+        <a href="{% url 'external_exeat:external_exeat_create' %}">
+          New external request →
+        </a>
+      </div>
+
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Student</th><th>Purpose</th><th>Destination</th><th>Departure</th><th>Return</th><th>Status</th><th>Parent check</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Purpose</th>
+              <th>Destination</th>
+              <th>Departure</th>
+              <th>Return</th>
+              <th>Status</th>
+              <th>Parent Check</th>
+            </tr>
+          </thead>
+
           <tbody>
             {% for item in external_requests %}
-              <tr><td>{{ item.student.first_name }} {{ item.student.last_name }}</td><td>{{ item.purpose }}</td><td>{{ item.destination }}</td><td>{{ item.departure_date }} {{ item.departure_time }}</td><td>{{ item.return_date }} {{ item.return_time }}</td><td><span class="status status-{{ item.status }}">{{ item.get_status_display }}</span></td><td>{{ item.get_parent_verification_status_display }}</td></tr>
-            {% empty %}<tr><td colspan="7" class="table-empty">No external exeat requests yet.</td></tr>{% endfor %}
+              <tr>
+                <td>
+                  {{ item.student.first_name }}
+                  {{ item.student.last_name }}
+                </td>
+                <td>{{ item.purpose }}</td>
+                <td>{{ item.destination }}</td>
+                <td>
+                  {{ item.departure_date }}
+                  {{ item.departure_time }}
+                </td>
+                <td>
+                  {{ item.return_date }}
+                  {{ item.return_time }}
+                </td>
+                <td>
+                  <span class="status status-{{ item.status }}">
+                    {{ item.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  {{ item.get_parent_verification_status_display }}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="7" class="table-empty">
+                  No external exeat requests yet.
+                  <a href="{% url 'external_exeat:external_exeat_create' %}">
+                    Submit your first request.
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
     </section>
+
+    <!-- Helpful links -->
+    <section class="content-section">
+      <div class="section-heading">
+        <div>
+          <h2>Helpful Resources</h2>
+          <p>Find guidance for using the parent portal.</p>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <a href="/">Portal Home</a>
+        <a href="/about/">About the Exeat System</a>
+        <a href="{% url 'guardians:link_child' %}">
+          Link a Child
+        </a>
+        <a href="/announcements/">School Announcements</a>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="site-footer"><strong>Mfantsipim School</strong><p>“Dwen Hwe Kan” · Cape Coast, Ghana</p><p>© {% now "Y" %} Exeat Portal</p></footer>
+  <footer class="site-footer">
+    <strong>Mfantsipim School</strong>
+    <p>“Dwen Hwe Kan” · Cape Coast, Ghana</p>
+    <p>© {% now "Y" %} Exeat Portal</p>
+  </footer>
+
 </body>
 </html>
+```

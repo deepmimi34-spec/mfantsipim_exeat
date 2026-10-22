@@ -36,7 +36,7 @@ def internal_exeat(request):
                         request,
                         "Your internal exeat request has been submitted. It is awaiting the school's parent-contact verification and approval.",
                     )
-                    return redirect("internal_exeat:internal_exeat_create")
+                    return redirect("internal_exeat:internal_exeat")
     else:
         form = InternalExeatForm(parent_profile=parent_profile)
 

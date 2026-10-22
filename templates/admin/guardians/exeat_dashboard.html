@@ -1,0 +1,50 @@
+
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="module">
+    <h2>Exeat Management Dashboard</h2>
+
+    <div class="flex-container" style="display:flex; flex-wrap:wrap; gap:16px;">
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Total Students</h3>
+            <p>{{ total_students }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Parent Profiles</h3>
+            <p>{{ total_parents }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Verified Guardian Links</h3>
+            <p>{{ verified_links }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Pending Guardian Links</h3>
+            <p>{{ pending_links }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Pending Internal Exeats</h3>
+            <p>{{ pending_internal }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Pending External Exeats</h3>
+            <p>{{ pending_external }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Approved Internal Exeats</h3>
+            <p>{{ approved_internal }}</p>
+        </div>
+
+        <div class="module" style="padding:20px; min-width:180px;">
+            <h3>Approved External Exeats</h3>
+            <p>{{ approved_external }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

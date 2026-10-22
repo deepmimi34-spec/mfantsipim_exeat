@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -5,17 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="description" content="Mfantsipim School Digital Exeat Portal for parent-child linking, exeat requests and school announcements.">
+
     <title>{{ page_title|default:"Home | Mfantsipim School Exeat Portal" }}</title>
 
     <style>
         :root {
             --crimson: #8b1538;
-            --dark-crimson: #5d0c24;
+            --dark-crimson: #570b22;
             --gold: #d5b778;
-            --light: #f7f5f2;
-            --text: #252525;
-            --muted: #686868;
             --white: #ffffff;
+            --black: #211d20;
+            --muted: #6b6268;
+            --background: #f7f4f5;
+            --border: #e7dfe3;
+            --shadow: 0 10px 30px rgba(50, 10, 25, 0.08);
         }
 
         * {
@@ -24,127 +29,167 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
-            color: var(--text);
-            background: var(--light);
-            line-height: 1.6;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.7;
         }
 
         a {
-            text-decoration: none;
+            color: inherit;
         }
 
-        /* Navigation */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 4px;
+        }
+
+        /* Header */
 
         .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: var(--dark-crimson);
             color: var(--white);
-            padding: 18px 7%;
+            border-bottom: 4px solid var(--gold);
+            padding: 16px 6%;
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             gap: 25px;
         }
 
         .brand {
-            color: var(--white);
-            font-size: 1.15rem;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 1.05rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.7px;
+            line-height: 1.4;
+            flex-shrink: 0;
         }
 
         .brand span {
             display: block;
             color: var(--gold);
-            font-size: 0.75rem;
-            font-weight: normal;
-            letter-spacing: 2px;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            margin-top: 3px;
         }
 
         nav ul {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 22px;
+            justify-content: flex-end;
+            gap: 25px;
             list-style: none;
+            flex-wrap: wrap;
         }
 
         nav a {
+            text-decoration: none;
             color: var(--white);
-            font-size: 0.93rem;
+            font-size: 0.94rem;
             transition: color 0.2s ease;
         }
 
-        nav a:hover,
-        nav a[aria-current="page"] {
+        nav a:hover {
             color: var(--gold);
         }
 
-        /* Hero section */
+        .nav-login {
+            display: inline-block;
+            padding: 9px 15px;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+        }
+
+        /* Hero */
 
         .hero {
-            background:
-                linear-gradient(
-                    110deg,
-                    rgba(55, 5, 23, 0.95),
-                    rgba(139, 21, 56, 0.85)
-                );
+            position: relative;
+            overflow: hidden;
             color: var(--white);
-            padding: 90px 7%;
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(213, 183, 120, 0.2),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    120deg,
+                    var(--dark-crimson),
+                    var(--crimson)
+                );
+            padding: 100px 7% 95px;
         }
 
         .hero-content {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: auto;
         }
 
         .eyebrow {
             color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
             font-size: 0.85rem;
             font-weight: bold;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .hero h1 {
             max-width: 800px;
-            font-size: clamp(2.2rem, 5vw, 4rem);
-            line-height: 1.15;
-            margin-bottom: 22px;
+            font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+            line-height: 1.13;
+            margin-bottom: 25px;
         }
 
         .hero h1 span {
+            display: block;
             color: var(--gold);
         }
 
-        .hero p {
-            max-width: 680px;
-            color: #f0e9ec;
-            font-size: 1.08rem;
-            margin-bottom: 30px;
+        .hero-description {
+            max-width: 690px;
+            color: #f4e9ed;
+            font-size: 1.1rem;
+            margin-bottom: 32px;
         }
 
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
+            gap: 15px;
         }
 
         .button {
-            display: inline-block;
-            padding: 13px 22px;
-            border-radius: 6px;
-            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 22px;
+            border-radius: 7px;
+            text-decoration: none;
             text-align: center;
-            transition: transform 0.2s ease,
-                        background 0.2s ease;
+            font-weight: bold;
+            border: 2px solid transparent;
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
         }
 
         .button:hover {
@@ -157,11 +202,11 @@
         }
 
         .button-primary:hover {
-            background: #e4cb94;
+            background: #ead6a8;
         }
 
         .button-outline {
-            border: 1px solid var(--white);
+            border-color: var(--white);
             color: var(--white);
         }
 
@@ -170,27 +215,74 @@
             color: var(--dark-crimson);
         }
 
-        /* Main content */
+        /* Quick information strip */
+
+        .quick-strip {
+            background: #f4edf0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quick-strip-inner {
+            max-width: 1250px;
+            margin: auto;
+            padding: 24px 6%;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .quick-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+        }
+
+        .quick-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--crimson);
+            font-size: 1.25rem;
+        }
+
+        .quick-item h3 {
+            color: var(--dark-crimson);
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .quick-item p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* General sections */
 
         .section {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: auto;
-            padding: 65px 7%;
+            padding: 75px 6%;
         }
 
         .section-heading {
-            margin-bottom: 32px;
+            max-width: 760px;
+            margin: 0 auto 38px;
+            text-align: center;
         }
 
         .section-heading h2 {
             color: var(--dark-crimson);
-            font-size: 2rem;
-            margin-bottom: 8px;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            line-height: 1.25;
+            margin-bottom: 12px;
         }
 
         .section-heading p {
             color: var(--muted);
-            max-width: 680px;
         }
 
         /* Service cards */
@@ -202,26 +294,34 @@
         }
 
         .service-card {
-            background: var(--white);
-            border: 1px solid #e9e2e4;
-            border-radius: 12px;
-            padding: 28px;
-            box-shadow: 0 5px 18px rgba(40, 10, 20, 0.05);
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            padding: 30px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 36px rgba(50, 10, 25, 0.12);
         }
 
         .service-icon {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             display: grid;
             place-items: center;
-            border-radius: 10px;
-            background: #f5e5eb;
+            background: #f5e7ec;
             color: var(--crimson);
-            font-size: 1.5rem;
-            margin-bottom: 18px;
+            border-radius: 12px;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
         }
 
         .service-card h3 {
@@ -239,133 +339,277 @@
         .card-link {
             color: var(--crimson);
             font-weight: bold;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
         }
 
         .card-link:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--crimson);
         }
 
         /* How it works */
 
         .process-section {
-            background: #eee8e8;
+            background: var(--background);
         }
 
         .process-content {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: auto;
-            padding: 60px 7%;
+            padding: 75px 6%;
         }
 
         .steps {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 24px;
         }
 
         .step {
-            padding: 20px 0;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 4px solid var(--gold);
         }
 
         .step-number {
-            display: inline-grid;
+            display: grid;
             place-items: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             background: var(--crimson);
             color: var(--white);
+            border-radius: 50%;
             font-weight: bold;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .step h3 {
             color: var(--dark-crimson);
-            margin-bottom: 8px;
+            margin-bottom: 9px;
+            font-size: 1.08rem;
         }
 
         .step p {
             color: var(--muted);
+            font-size: 0.95rem;
         }
 
-        .notice {
-            margin-top: 30px;
-            padding: 17px 20px;
+        /* Parent call to action */
+
+        .parent-section {
+            max-width: 1250px;
+            margin: auto;
+            padding: 0 6% 75px;
+        }
+
+        .parent-panel {
+            background: var(--dark-crimson);
+            color: var(--white);
+            border-radius: 16px;
+            padding: clamp(28px, 5vw, 55px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .parent-panel h2 {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            margin-bottom: 12px;
+        }
+
+        .parent-panel p {
+            max-width: 680px;
+            color: #f1e5e9;
+        }
+
+        .parent-panel .button {
+            flex-shrink: 0;
+        }
+
+        /* About section */
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 35px;
+            align-items: start;
+        }
+
+        .about-copy h2 {
+            color: var(--dark-crimson);
+            font-size: 2rem;
+            margin-bottom: 18px;
+        }
+
+        .about-copy p {
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .about-note {
+            background: #f7f0e2;
+            padding: 25px;
             border-left: 4px solid var(--gold);
+            border-radius: 8px;
+        }
+
+        .about-note h3 {
+            color: var(--dark-crimson);
+            margin-bottom: 10px;
+        }
+
+        .about-note p {
+            color: #554c50;
+        }
+
+        /* FAQs */
+
+        .faq-section {
+            background: var(--background);
+        }
+
+        .faq-list {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        details {
             background: var(--white);
-            color: #454047;
-            border-radius: 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 18px 20px;
+        }
+
+        summary {
+            cursor: pointer;
+            color: var(--dark-crimson);
+            font-weight: bold;
+        }
+
+        details p {
+            color: var(--muted);
+            margin-top: 12px;
         }
 
         /* Footer */
 
         footer {
-            background: var(--dark-crimson);
+            background: #310715;
             color: var(--white);
+            padding: 35px 6%;
             text-align: center;
-            padding: 28px 7%;
         }
 
-        footer h3 {
+        footer h2 {
             color: var(--gold);
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            margin-bottom: 7px;
         }
 
         footer p {
-            font-size: 0.9rem;
             color: #eadfe3;
+            font-size: 0.92rem;
         }
 
-        /* Mobile responsiveness */
+        .footer-bottom {
+            margin-top: 18px;
+            padding-top: 17px;
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+        }
 
-        @media (max-width: 850px) {
+        /* Responsive layout */
+
+        @media (max-width: 950px) {
             .nav-container {
-                flex-direction: column;
                 align-items: flex-start;
+                flex-direction: column;
             }
 
             nav ul {
-                gap: 14px;
+                justify-content: flex-start;
+                gap: 15px 20px;
             }
 
-            .service-grid,
+            .service-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .steps {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .quick-strip-inner {
                 grid-template-columns: 1fr;
             }
-
-            .hero {
-                padding-top: 65px;
-                padding-bottom: 65px;
-            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 650px) {
             .site-header {
-                padding: 18px 5%;
+                padding: 15px 5%;
             }
 
             nav ul {
-                gap: 10px 16px;
+                gap: 12px 16px;
             }
 
             nav a {
-                font-size: 0.85rem;
-            }
-
-            .section,
-            .process-content {
-                padding: 45px 6%;
+                font-size: 0.88rem;
             }
 
             .hero {
-                padding-left: 6%;
-                padding-right: 6%;
+                padding: 70px 6%;
+            }
+
+            .hero-description {
+                font-size: 1rem;
             }
 
             .hero-actions {
                 flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .section,
+            .process-content {
+                padding: 55px 6%;
+            }
+
+            .service-grid,
+            .steps,
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .parent-section {
+                padding: 0 5% 55px;
+            }
+
+            .parent-panel {
                 align-items: stretch;
+                flex-direction: column;
+            }
+
+            .parent-panel .button {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+                animation: none !important;
             }
         }
     </style>
@@ -373,7 +617,7 @@
 
 <body>
 
-    <!-- Navigation -->
+    <!-- Main navigation: fewer, distinct destinations -->
     <header class="site-header">
         <div class="nav-container">
 
@@ -384,19 +628,13 @@
 
             <nav aria-label="Main navigation">
                 <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/announcements/">Announcements</a></li>
                     <li>
-                        <a href="/" aria-current="page">Home</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'internal_exeat:internal_exeat' %}">Internal Exeat</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'external_exeat:external_exeat_create' %}">
-                            External Exeat
+                        <a class="nav-login" href="/accounts/login/">
+                            Parent Login
                         </a>
-                    </li>
-                    <li>
-                        <a href="/announcements/">Announcements</a>
                     </li>
                 </ul>
             </nav>
@@ -404,172 +642,212 @@
         </div>
     </header>
 
-
-    <!-- Welcome section -->
     <main>
 
+        <!-- Welcome hero -->
         <section class="hero">
             <div class="hero-content">
 
-                <p class="eyebrow">Mfantsipim School · Cape Coast, Ghana</p>
+                <p class="eyebrow">
+                    Mfantsipim School · Cape Coast, Ghana
+                </p>
 
                 <h1>
                     Welcome to the
                     <span>Digital Exeat Portal</span>
                 </h1>
 
-                <p>
-                    A digital platform for managing student exeat requests.
-                    Access the appropriate exeat service, review school
-                    announcements, and follow the school's established
-                    approval process.
+                <p class="hero-description">
+                    A convenient online portal for parents and guardians
+                    to connect with their children’s school records,
+                    request student exeats, and stay informed about
+                    important school announcements.
                 </p>
 
                 <div class="hero-actions">
-                    <a href="{% url 'internal_exeat:internal_exeat' %}" class="button button-primary">
-                        Internal Exeat
+                    <a href="/parents/link-child/"
+                       class="button button-primary">
+                        Link My Child
                     </a>
 
                     <a href="{% url 'external_exeat:external_exeat_create' %}"
                        class="button button-outline">
-                        External Exeat
+                        Request an Exeat
                     </a>
                 </div>
 
             </div>
         </section>
 
+        <!-- Brief service overview -->
+        <section class="quick-strip" aria-label="Portal benefits">
+            <div class="quick-strip-inner">
 
-        <!-- Portal services -->
-        <section class="section">
-            <div class="section-heading">
-                <h2>Explore the Portal</h2>
-                <p>
-                    Choose a service below to continue to the relevant
-                    section of the Mfantsipim School Exeat Portal.
-                </p>
-            </div>
+                <div class="quick-item">
+                    <div class="quick-icon" aria-hidden="true">👨‍👩‍👦</div>
+                    <div>
+                        <h3>Parent–Student Linking</h3>
+                        <p>Submit your child's details for school verification.</p>
+                    </div>
+                </div>
 
-            <div class="service-grid">
+                <div class="quick-item">
+                    <div class="quick-icon" aria-hidden="true">📄</div>
+                    <div>
+                        <h3>Online Exeat Requests</h3>
+                        <p>Access the appropriate exeat service online.</p>
+                    </div>
+                </div>
 
-                <article class="service-card">
-                    <div class="service-icon" aria-hidden="true">🏫</div>
-
-                    <h3>Internal Exeat</h3>
-
-                    <p>
-                        Access the internal exeat service for requests
-                        that fall under the school's internal exeat
-                        procedures.
-                    </p>
-
-                    <a href="{% url 'internal_exeat:internal_exeat' %}" class="card-link">
-                        Go to Internal Exeat &rarr;
-                    </a>
-                </article>
-
-
-                <article class="service-card">
-                    <div class="service-icon" aria-hidden="true">🚪</div>
-
-                    <h3>External Exeat</h3>
-
-                    <p>
-                        Submit an external exeat request by providing the
-                        required student information, purpose, destination,
-                        and departure and return details.
-                    </p>
-
-                    <a href="{% url 'external_exeat:external_exeat_create' %}"
-                       class="card-link">
-                        Request External Exeat &rarr;
-                    </a>
-                </article>
-
-
-                <article class="service-card">
-                    <div class="service-icon" aria-hidden="true">📢</div>
-
-                    <h3>Announcements</h3>
-
-                    <p>
-                        Visit the announcements section for school notices
-                        and important information published by the school.
-                    </p>
-
-                    <a href="/announcements/" class="card-link">
-                        View Announcements &rarr;
-                    </a>
-                </article>
+                <div class="quick-item">
+                    <div class="quick-icon" aria-hidden="true">📢</div>
+                    <div>
+                        <h3>School Updates</h3>
+                        <p>Find school notices in one convenient place.</p>
+                    </div>
+                </div>
 
             </div>
         </section>
 
 
-        <!-- Process information -->
-        <section class="process-section">
-            <div class="process-content">
+
+        <!-- Parent call to action -->
+        <section class="parent-section">
+            <div class="parent-panel">
+                <div>
+                    <h2>Are you a parent or guardian?</h2>
+                    <p>
+                        Start by signing in and submitting your child's
+                        school details. For security, the school must
+                        verify the relationship before the link is approved.
+                    </p>
+                </div>
+
+                <a href="/parents/link-child/"
+                   class="button button-primary">
+                    Start Child Linking
+                </a>
+            </div>
+        </section>
+
+        <!-- About information -->
+        <section class="section" id="about">
+            <div class="about-grid">
+
+                <div class="about-copy">
+                    <h2>About the Exeat Portal</h2>
+
+                    <p>
+                        The Mfantsipim School Digital Exeat Portal is
+                        designed to make selected parent and exeat
+                        processes easier to access online.
+                    </p>
+
+                    <p>
+                        Student information and parent relationships
+                        must be checked against school records.
+                        Submitting an online request does not itself
+                        constitute school approval.
+                    </p>
+
+                    <p>
+                        Parents should provide accurate information
+                        and follow the school's verification procedures.
+                    </p>
+                </div>
+
+                <aside class="about-note">
+                    <h3>Protect Your Information</h3>
+                    <p>
+                        Enter only the student information requested by
+                        the portal. Never share your Google password.
+                        If the student details do not match school records,
+                        contact the school through its established
+                        communication channels.
+                    </p>
+                </aside>
+
+            </div>
+        </section>
+
+        <!-- Frequently asked questions -->
+        <section class="faq-section">
+            <div class="section">
 
                 <div class="section-heading">
-                    <h2>How the Exeat Process Works</h2>
+                    <h2>Frequently Asked Questions</h2>
                     <p>
-                        The portal supports the school's exeat process;
-                        submitting a request does not automatically grant
-                        permission to leave.
+                        Open a question to read the answer.
                     </p>
                 </div>
 
-                <div class="steps">
+                <div class="faq-list">
 
-                    <article class="step">
-                        <span class="step-number">1</span>
-                        <h3>Select a Service</h3>
+                    <details>
+                        <summary>How do I link my child?</summary>
                         <p>
-                            Open the internal or external exeat section,
-                            depending on the type of request required.
+                            Sign in if required, open the Link My Child
+                            form, and enter the student's admission
+                            number and full name. The school must
+                            verify your request before the link is approved.
                         </p>
-                    </article>
+                    </details>
 
-                    <article class="step">
-                        <span class="step-number">2</span>
-                        <h3>Submit the Request</h3>
+                    <details>
+                        <summary>What if the student's details are rejected?</summary>
                         <p>
-                            Complete the relevant request form and provide
-                            accurate information for school review.
+                            Check that the admission number and full name
+                            match the school's records. If they are correct
+                            and the problem continues, contact the school
+                            for assistance.
                         </p>
-                    </article>
+                    </details>
 
-                    <article class="step">
-                        <span class="step-number">3</span>
-                        <h3>Await Authorisation</h3>
+                    <details>
+                        <summary>Does submitting the form link my child immediately?</summary>
                         <p>
-                            Follow the school's verification and approval
-                            procedures before making arrangements to leave.
+                            No. The form is a request for verification.
+                            The relationship should remain pending until
+                            the school completes its review and approves it.
                         </p>
-                    </article>
+                    </details>
+
+                    <details>
+                        <summary>Where can I find school announcements?</summary>
+                        <p>
+                            Use the Announcements link in the main
+                            navigation to view published school notices.
+                        </p>
+                    </details>
+
+                    <details>
+                        <summary>What if I cannot sign in?</summary>
+                        <p>
+                            Confirm that you are using the Google account
+                            accepted by the school. If you still cannot
+                            access the portal, contact the school for help.
+                        </p>
+                    </details>
 
                 </div>
-
-                <div class="notice">
-                    <strong>Important:</strong>
-                    Students must follow school rules and obtain the
-                    required authorisation before leaving school grounds.
-                </div>
-
             </div>
         </section>
 
     </main>
 
-
-    <!-- Footer -->
+    <!-- Simple footer without repeated service links -->
     <footer>
-        <h3>Mfantsipim School</h3>
-        <p>“Dwen Hwe Kan”</p>
-        <p>
-            Exeat Portal &copy; {% now "Y" %} |
-            Cape Coast, Ghana
-        </p>
+        <h2>Mfantsipim School</h2>
+        <p>Dwen Hwe Kan</p>
+        <p>Cape Coast, Ghana</p>
+
+        <div class="footer-bottom">
+            <p>
+                Exeat Portal &copy; {% now "Y" %}
+                · For authorised parent and school use
+            </p>
+        </div>
     </footer>
 
 </body>
