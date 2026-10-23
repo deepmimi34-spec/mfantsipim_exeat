@@ -1,0 +1,318 @@
+{% load static socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Parent Account | Mfantsipim Exeat System</title>
+
+    <style>
+        :root {
+            --crimson: #8b0000;
+            --dark-crimson: #650000;
+            --gold: #d4af37;
+            --background: #f5f5f7;
+            --text: #222;
+            --muted: #666;
+            --border: #dedede;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f5f5f7, #ece8e8);
+            color: var(--text);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 490px;
+            padding: 36px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.10);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 26px;
+        }
+
+        .brand-mark {
+            width: 62px;
+            height: 62px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 14px;
+            background: var(--crimson);
+            color: white;
+            border-bottom: 4px solid var(--gold);
+            border-radius: 14px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: var(--crimson);
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        h2 {
+            margin-bottom: 8px;
+            font-size: 25px;
+        }
+
+        .intro {
+            margin-bottom: 23px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        form p {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.08);
+        }
+
+        .helptext {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .errorlist {
+            padding-left: 20px;
+            color: #b00020;
+            font-size: 13px;
+        }
+
+        .primary-button,
+        .google-button {
+            width: 100%;
+            min-height: 46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            border: none;
+            background: var(--crimson);
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: var(--dark-crimson);
+        }
+
+        .google-button {
+            margin-top: 15px;
+            border: 1px solid var(--border);
+            background: white;
+            color: #333;
+        }
+
+        .google-button:hover {
+            background: #f8f8f8;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .notice {
+            margin: 18px 0;
+            padding: 13px;
+            border: 1px solid #f0dfa5;
+            border-radius: 8px;
+            background: #fff8e5;
+            color: #624d00;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .links {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .links a {
+            color: var(--crimson);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 23px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="brand">
+        <div class="brand-mark">M</div>
+
+        <h1>Mfantsipim School</h1>
+
+        <p>Dwen Hwe Kan · Parent Exeat Portal</p>
+    </div>
+
+    {% if user.is_authenticated %}
+
+        <h2>Account already active</h2>
+
+        <p class="intro">
+            You already have an active session.
+        </p>
+
+        <a href="/parents/dashboard/" class="primary-button">
+            Open Parent Dashboard
+        </a>
+
+    {% else %}
+
+        <h2>Create your account</h2>
+
+        <p class="intro">
+            Register for the Mfantsipim Parent Portal. After registration,
+            you may need to verify your email address and establish a
+            verified link to your child.
+        </p>
+
+        {% if form.non_field_errors %}
+            <div class="notice">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+
+            {% if redirect_field_value %}
+                <input
+                    type="hidden"
+                    name="{{ redirect_field_name }}"
+                    value="{{ redirect_field_value }}"
+                >
+            {% endif %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="primary-button">
+                Create Account
+            </button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <a
+            href="{% provider_login_url 'google' process='login' %}"
+            class="google-button"
+        >
+            Sign Up or Continue with Google
+        </a>
+
+        <div class="notice">
+            <strong>Please note:</strong>
+            Creating an account does not automatically verify your
+            relationship with a student. The school must complete the
+            required verification process before protected parent
+            services are made available.
+        </div>
+
+        <div class="links">
+            Already registered?
+            <a href="{% url 'account_login' %}">Sign in</a>
+        </div>
+
+    {% endif %}
+
+    <a href="/" class="back-link">
+        ← Return to the homepage
+    </a>
+
+</div>
+
+</body>
+</html>

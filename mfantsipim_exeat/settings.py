@@ -221,6 +221,25 @@ SESSION_COOKIE_SAMESITE = "Lax"
 # Enable HTTPS-only cookies in production.
 SESSION_COOKIE_SECURE = IS_PRODUCTION
 
+# Allow login using either a username or email address
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+
+# Fields required when creating an account
+ACCOUNT_SIGNUP_FIELDS = [
+    "username*",
+    "email*",
+    "password1*",
+    "password2*",
+]
+
+# Require email verification before allowing account access
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+# Ask Allauth to remember the user's login session
+ACCOUNT_SESSION_REMEMBER = True
+
+
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],

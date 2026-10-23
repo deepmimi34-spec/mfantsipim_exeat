@@ -626,18 +626,113 @@
                 <span>DWEN HWE KAN</span>
             </a>
 
+
+
             <nav aria-label="Main navigation">
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/announcements/">Announcements</a></li>
                     <li>
-                        <a class="nav-login" href="/accounts/login/">
-                            Parent Login
-                        </a>
+                        <a href="/">Home</a>
                     </li>
+
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+
+                    <li>
+                        <a href="/announcements/">Announcements</a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+
+                        <li>
+                            <a href="/parents/dashboard/" class="nav-login">
+                                Parent Dashboard
+                            </a>
+                        </li>
+
+                        <li>
+                            <form method="post"
+                                  action="/accounts/logout/"
+                                  style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-login logout-button">
+                                    Log Out
+                                </button>
+                            </form>
+                        </li>
+
+                    {% else %}
+
+                        <li>
+                            <a href="/accounts/login/" class="nav-login">
+                                Parent Login
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/accounts/signup/" class="nav-signup">
+                                Create Account
+                            </a>
+                        </li>
+
+                    {% endif %}
                 </ul>
             </nav>
+
+            <style>
+                nav[aria-label="Main navigation"] ul {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                nav[aria-label="Main navigation"] a {
+                    text-decoration: none;
+                }
+
+                .nav-login,
+                .nav-signup {
+                    display: inline-block;
+                    padding: 10px 16px;
+                    border-radius: 6px;
+                    font: inherit;
+                    font-weight: 600;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                }
+
+                .nav-login {
+                    color: white;
+                    background: transparent;
+                    border: 1px solid rgba(255, 255, 255, 0.65);
+                }
+
+                .nav-login:hover {
+                    background: rgba(255, 255, 255, 0.12);
+                }
+
+                .nav-signup {
+                    color: #fff;
+                    background: #8b0000;
+                    border: 1px solid #8b0000;
+                }
+
+                .nav-signup:hover {
+                    background: #650000;
+                }
+
+                .logout-button {
+                    font-family: inherit;
+                    border: 1px solid rgba(255, 255, 255, 0.65);
+                }
+            </style>
+
+
 
         </div>
     </header>
@@ -664,17 +759,31 @@
                     important school announcements.
                 </p>
 
-                <div class="hero-actions">
-                    <a href="/parents/link-child/"
-                       class="button button-primary">
-                        Link My Child
-                    </a>
 
-                    <a href="{% url 'external_exeat:external_exeat_create' %}"
-                       class="button button-outline">
-                        Request an Exeat
-                    </a>
+                <div class="hero-actions">
+                    {% if user.is_authenticated %}
+                        <a href="/parents/dashboard/"
+                           class="button button-primary">
+                            Go to My Dashboard
+                        </a>
+
+                        <a href="{% url 'external_exeat:external_exeat_create' %}"
+                           class="button button-outline">
+                            Request an Exeat
+                        </a>
+                    {% else %}
+                        <a href="/accounts/login/"
+                           class="button button-primary">
+                            Parent Login
+                        </a>
+
+                        <a href="/about/"
+                           class="button button-outline">
+                            How to Get Started
+                        </a>
+                    {% endif %}
                 </div>
+
 
             </div>
         </section>
@@ -786,6 +895,9 @@
             <p>
                 Exeat Portal &copy; {% now "Y" %}
                 · For authorised parent and school use
+            </p>
+            <p>
+                Powered By Hi-Tech
             </p>
         </div>
     </footer>
