@@ -1,17 +1,20 @@
-from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import redirect, render
 
 from .forms import StudentProfileForm
 
 
+@staff_member_required
 def student_profile_create(request):
     """Display and process the student profile creation form."""
+
     if request.method == "POST":
         form = StudentProfileForm(request.POST)
 
         if form.is_valid():
             student = form.save()
+
             messages.success(
                 request,
                 (
@@ -20,14 +23,17 @@ def student_profile_create(request):
                     f"Current classroom: {student.current_classroom}."
                 ),
             )
+
             return redirect("external_exeat:external_exeat_create")
+
     else:
         form = StudentProfileForm()
 
     return render(
         request,
         "students/student_profile_form.html",
-        {"form": form, "page_title": "Create Student Profile"},
+        {
+            "form": form,
+            "page_title": "Create Student Profile",
+        },
     )
-
-# Create your views here.

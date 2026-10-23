@@ -199,10 +199,27 @@ AUTHENTICATION_BACKENDS = [
 ROOT_URLCONF = 'mfantsipim_exeat.urls'
 
 
-SITE_ID = 2
+# Authentication and persistent sessions
+
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/parents/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Keep users signed in for 30 days.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
+# Do not expire the session just because the browser closes.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Refresh the session expiry while the user is active.
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Protect session cookies in production.
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+
+# Enable HTTPS-only cookies in production.
+SESSION_COOKIE_SECURE = IS_PRODUCTION
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

@@ -1,4 +1,3 @@
-```html
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -78,89 +77,6 @@
       </div>
     </section>
 
-    <!-- Quick access -->
-    <section class="content-section">
-      <div class="section-heading">
-        <div>
-          <h2>Quick Access</h2>
-          <p>Navigate directly to the service you need.</p>
-        </div>
-      </div>
-
-      <div class="card-grid">
-
-        <article class="portal-card">
-          <h3>Link a Child</h3>
-          <p>
-            Submit a request to connect your parent account
-            to a student's school record.
-          </p>
-          <a class="button button-primary"
-             href="{% url 'guardians:link_child' %}">
-            Link Child →
-          </a>
-        </article>
-
-        <article class="portal-card">
-          <h3>Internal Exeat</h3>
-          <p>
-            Access the internal exeat application for a
-            child whose guardian link has been verified.
-          </p>
-          <a class="button button-primary"
-             href="{% url 'internal_exeat:internal_exeat' %}">
-            Apply for Internal Exeat →
-          </a>
-        </article>
-
-        <article class="portal-card">
-          <h3>External Exeat</h3>
-          <p>
-            Submit an external exeat request and provide
-            the required departure and return details.
-          </p>
-          <a class="button button-secondary"
-             href="{% url 'external_exeat:external_exeat_create' %}">
-            Apply for External Exeat →
-          </a>
-        </article>
-
-        <article class="portal-card">
-          <h3>Parent Verification Guide</h3>
-          <p>
-            Learn how student matching, school verification,
-            and guardian approval work.
-          </p>
-          <a class="button button-secondary" href="/about/">
-            Read the Guide →
-          </a>
-        </article>
-
-        <article class="portal-card">
-          <h3>School Announcements</h3>
-          <p>
-            Read school notices and announcements relevant
-            to parents and students.
-          </p>
-          <a class="button button-secondary" href="/announcements/">
-            View Announcements →
-          </a>
-        </article>
-
-        <article class="portal-card">
-          <h3>Need Assistance?</h3>
-          <p>
-            If your child is missing from your account or
-            your verification is delayed, contact the school
-            office using its official contact details.
-          </p>
-          <a class="button button-secondary" href="/about/">
-            Help and Information →
-          </a>
-        </article>
-
-      </div>
-    </section>
 
     <!-- Linked children -->
     <section class="content-section">
@@ -405,4 +321,3 @@
 
 </body>
 </html>
-```
